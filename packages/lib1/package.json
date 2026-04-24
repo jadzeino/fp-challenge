@@ -1,0 +1,46 @@
+{
+  "name": "@raisin/lib1",
+  "version": "0.1.0",
+  "description": "Internal shared component library",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "maintainer": [
+    "FE_TEST_01"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:libs": "pnpm run -w g:nx run-many --target=build:library",
+    "build:clean": "pnpm run -w g:rimraf ./lib",
+    "check-types": "pnpm run -w g:tsc",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:report": "pnpm run -w g:eslint --no-error-on-unmatched-pattern --quiet ./src",
+    "lint:css": "pnpm run -w g:stylelint 'src/**/*.{css,less,sass,scss,ts}'",
+    "prettify": "pnpm run -w g:prettier --ignore-path=../../.prettierignore --config=../../.prettierrc . --write"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "@types/react": "17.0.47",
+    "@types/react-dom": "^17.0.13",
+    "watch": "1.0.2"
+  },
+  "peerDependencies": {
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.14.18",
+    "@mui/material": "5.x",
+    "@mui/styles": "5.x",
+    "react": "17.x",
+    "react-dom": "17.x"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  },
+  "packageManager": "pnpm@8.15.8"
+}

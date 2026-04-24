@@ -1,0 +1,53 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+packages/**/node_modules
+
+# production
+packages/**/dist
+packages/**/lib
+packages/**/.next
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+tsconfig.tsbuildinfo
+.npmrc
+
+**/.env
+
+**/.eslintcache
+
+.vscode/*
+!.vscode/example.launch.json
+!.vscode/settings.json
+*.code-workspace
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log
+
+report.json
+
+.idea
+*.iml
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# sonarqube
+**/.scannerwork
+
+.devcontainer
+
+.nx

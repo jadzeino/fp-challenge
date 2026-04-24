@@ -1,0 +1,9 @@
+# ignore all _ files like SCSS partials
+packages/**/_*
+
+# production
+packages/**/dist/*
+
+# dependencies
+node_modules/
+packages/**/node_modules/

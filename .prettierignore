@@ -1,0 +1,7 @@
+build/
+dist/
+node_modules/
+coverage
+.next/
+pnpm-lock.yaml
+CHANGELOG.md

@@ -1,0 +1,64 @@
+{
+  "name": "@raisin/app2",
+  "version": "0.1.0",
+  "description": "This is the second app from the monorepo",
+  "main": "index.js",
+  "private": true,
+  "keywords": [
+    "nextjs",
+    "typescript",
+    "react"
+  ],
+  "maintainer": [
+    "FE_TEST_02"
+  ],
+  "config": {
+    "analyze": false
+  },
+  "scripts": {
+    "build": "next build",
+    "build:clean": "pnpm run -w g:rimraf .next",
+    "build:libs": "pnpm run -w g:nx run-many --target=build:library",
+    "build:prod": "next build && next start -p 3001",
+    "check-types": "pnpm run -w g:tsc",
+    "dev": "next dev -p 3001",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix",
+    "lint:report": "pnpm run -w g:eslint --no-error-on-unmatched-pattern --quiet ./src",
+    "lint:css": "pnpm run -w g:stylelint 'src/**/*.{css,less,sass,scss,ts}'",
+    "minify:svg": "svgo -f ./src/assets/images",
+    "prettify": "pnpm run -w g:prettier --ignore-path=../../.prettierignore --config=../../.prettierrc . --write",
+    "setup": "pnpm -w install && pnpm run build:libs",
+    "start": "next start -p 3001"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.2",
+    "@statoscope/webpack-plugin": "^5.28.2",
+    "@types/node": "^20.8.7",
+    "@types/react": "17.0.47",
+    "@types/react-dom": "^17.0.13",
+    "raf": "^3.4.1",
+    "stylelint": "14.5.3",
+    "stylelint-config-recommended": "7.0.0",
+    "svgo": "2.8.0",
+    "typescript": "~5.2.2"
+  },
+  "peerDependencies": {
+    "@emotion/server": "^11.x",
+    "@mui/material-nextjs": "^5.x",
+    "next": "12.x",
+    "react": "17.x",
+    "react-dom": "17.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  },
+  "packageManager": "pnpm@8.15.8"
+}

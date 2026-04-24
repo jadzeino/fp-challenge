@@ -1,0 +1,15 @@
+{
+  "npmClient": "pnpm",
+  "version": "independent",
+  "command": {
+    "publish": {
+      "conventionalCommits": true
+    },
+    "version": {
+      "allowBranch": "main",
+      "message": "chore(release): publish"
+    }
+  },
+  "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/*.md"],
+  "useNx": true
+}

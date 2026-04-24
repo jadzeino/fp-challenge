@@ -1,0 +1,8 @@
+{
+  "**/*.{md,json}": "pnpm run -w g:prettier --write",
+  "**/*.{js,jsx,tsx,ts}": ["echo global \"eslint\" command is not active yet.", "prettier --write"],
+  "**/*.{css,scss,sass,less,ts}": [
+    "pnpm run -w g:stylelint --allow-empty-input --fix",
+    "pnpm run -w g:prettier --write"
+  ]
+}

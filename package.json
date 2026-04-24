@@ -1,0 +1,111 @@
+{
+  "name": "fp-challenge-monorepo",
+  "version": "1.0.0",
+  "description": "Raisin's Frontend Platform Challenge repo",
+  "main": "index.js",
+  "private": true,
+  "maintainer": [
+    "FE_TEST_01"
+  ],
+  "workspaces": {
+    "packages": [
+      "packages/**"
+    ]
+  },
+  "scripts": {
+    "postinstall": "pnpm husky:install",
+    "lint": "nx run-many --target=lint",
+    "prettify": "pnpm run -w g:prettier . --write",
+    "husky:install": "npx husky install",
+    "setup": "pnpm install --frozen-lockfile && pnpm build:libs",
+    "lint:css": "pnpm run -w g:stylelint '{packages,mfe,lib}/**/*.{css,less,sass,scss,ts}'",
+    "build:libs": "pnpm run -w g:nx run-many --target=build:library",
+    "clean:libs": "nx run-many --target=build:clean --parallel=5 && pnpm clean -y && nx reset",
+    "clean": "lerna clean",
+    "deep-reset": "pnpm run clean:libs && rm -rf node_modules .yarn && pnpm run setup",
+    "g:tsc": "cd $INIT_CWD && tsc",
+    "g:rimraf": "cd $INIT_CWD && rimraf",
+    "g:watch": "cd $INIT_CWD && watch",
+    "g:eslint": "cd $INIT_CWD && eslint",
+    "g:stylelint": "cd $INIT_CWD && stylelint",
+    "g:prettier": "cd $INIT_CWD && prettier",
+    "g:jest": "cd $INIT_CWD && jest",
+    "g:node": "cd $INIT_CWD && node",
+    "g:nx": "cd $INIT_CWD && nx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "TBD"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "7.16.0",
+    "@babel/preset-env": "7.16.11",
+    "@babel/preset-react": "^7.16.0",
+    "@next/bundle-analyzer": "^14.2.2",
+    "@typescript-eslint/eslint-plugin": "6.6.0",
+    "@typescript-eslint/parser": "6.6.0",
+    "eslint": "8.49.0",
+    "eslint-config-airbnb-typescript": "17.1.0",
+    "eslint-config-node": "4.1.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-import-resolver-typescript": "2.5.0",
+    "eslint-plugin-deprecation": "^2.0.0",
+    "eslint-plugin-import": "2.25.2",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-package-json": "0.1.4",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.26.1",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "11.2.6",
+    "nx": "17.3.2",
+    "postcss": "^8.4.29",
+    "postcss-scss": "4.0.6",
+    "postcss-styled-syntax": "^0.5.0",
+    "prettier": "2.8.8",
+    "react-hot-loader": "4.13.0",
+    "rimraf": "^5.0.5",
+    "stylelint": "^15.10.3",
+    "stylelint-config-css-modules": "^4.3.0",
+    "stylelint-config-recess-order": "^4.3.0",
+    "stylelint-config-recommended": "^13.0.0",
+    "stylelint-config-sass-guidelines": "^10.0.0",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-scss": "^5.1.0",
+    "typescript": "~5.2.2",
+    "watch": "1.0.2"
+  },
+  "resolutions": {
+    "@types/react": "17.0.47",
+    "@types/react-dom": "17.0.13",
+    "react-dom": "17.0.2",
+    "react": "17.0.2",
+    "react-error-overlay": "6.0.9",
+    "csstype": "3.0.11"
+  },
+  "dependencies": {
+    "@emotion/styled": "^11.3.0",
+    "@emotion/server": "^11.11.0",
+    "@mui/icons-material": "^5.14.18",
+    "@mui/material": "5.x",
+    "@mui/material-nextjs": "^5.x",
+    "@mui/styles": "5.x",
+    "lerna": "^7.4.2",
+    "next": "12.x",
+    "react-dom": "^17.0.2",
+    "react": "17.0.2",
+    "tslib": "^2.6.2"
+  },
+  "optionalDependencies": {
+    "encoding": "^0.1.13"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  },
+  "packageManager": "pnpm@8.15.8",
+  "config": {
+    "analyze": false
+  }
+}
