@@ -1,0 +1,18 @@
+{
+  "actions": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "cancel": "Abbrechen",
+    "retry": "Erneut versuchen"
+  },
+  "common": {
+    "loading": "Lädt…",
+    "error": "Etwas ist schiefgelaufen",
+    "unauthenticated": "Sie sind nicht angemeldet"
+  },
+  "locale": {
+    "switcher_label": "Sprache",
+    "en": "English",
+    "de": "Deutsch"
+  }
+}

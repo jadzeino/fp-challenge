@@ -1,0 +1,45 @@
+{
+  "name": "@raisin/common-i18n",
+  "version": "0.1.0",
+  "description": "Shared i18n provider, hooks, and global translations for the Raisin platform",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./locales/global/en.json": "./locales/global/en.json",
+    "./locales/global/de.json": "./locales/global/de.json"
+  },
+  "files": [
+    "lib",
+    "locales"
+  ],
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:clean": "pnpm run -w g:rimraf ./lib",
+    "check-types": "pnpm run -w g:tsc",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix",
+    "test": "pnpm run -w g:jest"
+  },
+  "dependencies": {
+    "i18next": "^23.7.0",
+    "react-i18next": "^13.5.0"
+  },
+  "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
+    "@types/node": "^20.8.7",
+    "@types/react": "17.0.47"
+  },
+  "peerDependencies": {
+    "react": "17.x"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}

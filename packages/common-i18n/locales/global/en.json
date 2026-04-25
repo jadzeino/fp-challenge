@@ -1,0 +1,18 @@
+{
+  "actions": {
+    "login": "Log in",
+    "logout": "Log out",
+    "cancel": "Cancel",
+    "retry": "Try again"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "unauthenticated": "You are not logged in"
+  },
+  "locale": {
+    "switcher_label": "Language",
+    "en": "English",
+    "de": "Deutsch"
+  }
+}
