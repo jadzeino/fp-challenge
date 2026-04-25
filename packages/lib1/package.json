@@ -25,6 +25,7 @@
     "prettify": "pnpm run -w g:prettier --ignore-path=../../.prettierignore --config=../../.prettierrc . --write"
   },
   "devDependencies": {
+    "@raisin/tsconfig": "workspace:*",
     "@types/node": "^20.8.7",
     "@types/react": "17.0.47",
     "@types/react-dom": "^17.0.13",

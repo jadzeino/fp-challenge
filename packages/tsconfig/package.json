@@ -1,0 +1,19 @@
+{
+  "name": "@raisin/tsconfig",
+  "version": "0.1.0",
+  "description": "Shared TypeScript configuration presets for the Raisin frontend platform",
+  "private": true,
+  "files": [
+    "base.json",
+    "next.json",
+    "library.json",
+    "node.json"
+  ],
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}
