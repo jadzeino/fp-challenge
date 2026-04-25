@@ -33,7 +33,8 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.2",
-    "@raisin/lib1": "workspace:^",
+    "@raisin/design-system": "workspace:^",
+    "@raisin/eslint-config": "workspace:*",
     "@raisin/tsconfig": "workspace:*",
     "@statoscope/webpack-plugin": "^5.28.2",
     "@types/node": "^20.8.7",

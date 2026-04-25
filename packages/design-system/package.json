@@ -1,11 +1,11 @@
 {
-  "name": "@raisin/lib1",
+  "name": "@raisin/design-system",
   "version": "0.1.0",
-  "description": "Internal shared component library",
+  "description": "React design system for the Raisin frontend platform (formerly @raisin/lib1)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "maintainer": [
-    "FE_TEST_01"
+    "platform"
   ],
   "directories": {
     "lib": "lib"
@@ -22,9 +22,14 @@
     "lint": "pnpm run -w g:eslint ./src --cache",
     "lint:report": "pnpm run -w g:eslint --no-error-on-unmatched-pattern --quiet ./src",
     "lint:css": "pnpm run -w g:stylelint 'src/**/*.{css,less,sass,scss,ts}'",
+    "test": "pnpm run -w g:jest",
     "prettify": "pnpm run -w g:prettier --ignore-path=../../.prettierignore --config=../../.prettierrc . --write"
   },
+  "dependencies": {
+    "@raisin/design-tokens": "workspace:*"
+  },
   "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
     "@raisin/tsconfig": "workspace:*",
     "@types/node": "^20.8.7",
     "@types/react": "17.0.47",
@@ -33,9 +38,7 @@
   },
   "peerDependencies": {
     "@emotion/styled": "^11.3.0",
-    "@mui/icons-material": "^5.14.18",
     "@mui/material": "5.x",
-    "@mui/styles": "5.x",
     "react": "17.x",
     "react-dom": "17.x"
   },

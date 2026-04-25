@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@raisin/lib1';
+import { Button } from '@raisin/design-system';
 
 const UseCase1: React.FC = () => (
   <div className="wrapper">
