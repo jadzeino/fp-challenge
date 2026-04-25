@@ -1,0 +1,42 @@
+{
+  "name": "@raisin/auth-client",
+  "version": "0.1.0",
+  "description": "Token management, refresh, and request injection for Raisin frontend apps",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./react": {
+      "types": "./lib/react.d.ts",
+      "default": "./lib/react.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:clean": "pnpm run -w g:rimraf ./lib",
+    "check-types": "pnpm run -w g:tsc",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix",
+    "test": "pnpm run -w g:jest"
+  },
+  "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
+    "@types/node": "^20.8.7",
+    "@types/react": "17.0.47"
+  },
+  "peerDependencies": {
+    "react": "17.x"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}
