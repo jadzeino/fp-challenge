@@ -44,6 +44,8 @@
     "@babel/preset-env": "7.16.11",
     "@babel/preset-react": "^7.16.0",
     "@next/bundle-analyzer": "^14.2.2",
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
     "@typescript-eslint/eslint-plugin": "6.6.0",
     "@typescript-eslint/parser": "6.6.0",
     "eslint": "8.49.0",

@@ -1,0 +1,18 @@
+{
+  "name": "@raisin/eslint-config",
+  "version": "0.1.0",
+  "description": "Shared ESLint configuration for the Raisin frontend platform",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "rules/"
+  ],
+  "peerDependencies": {
+    "eslint": ">=8"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}
