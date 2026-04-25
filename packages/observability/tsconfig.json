@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@raisin/tsconfig/library.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "jsx": "react",
+    "lib": ["dom", "ESNext"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "lib", "**/__tests__/**"]
+}
