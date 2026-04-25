@@ -24,7 +24,8 @@
     }
   },
   "files": [
-    "lib"
+    "lib",
+    "jest-preset.js"
   ],
   "scripts": {
     "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",

@@ -12,7 +12,8 @@
           "lint:fix",
           "lint:report",
           "lint",
-          "lint:css"
+          "lint:css",
+          "test"
         ]
       }
     }
