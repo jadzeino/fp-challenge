@@ -1,0 +1,20 @@
+{
+  "home": {
+    "title": "Willkommen bei Raisin app1",
+    "subtitle": "Diese Seite wird von app1 ausgeliefert.",
+    "go_app2": "Zu app2",
+    "go_app3": "Zu app3"
+  },
+  "accounts": {
+    "title": "Ihre Konten",
+    "empty": "Keine Konten vorhanden.",
+    "columns": {
+      "holder": "Kontoinhaber",
+      "iban": "IBAN",
+      "balance": "Saldo",
+      "currency": "Währung",
+      "openedAt": "Eröffnet"
+    },
+    "load_error": "Konten konnten nicht geladen werden."
+  }
+}
