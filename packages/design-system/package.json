@@ -26,6 +26,7 @@
     "prettify": "pnpm run -w g:prettier --ignore-path=../../.prettierignore --config=../../.prettierrc . --write"
   },
   "dependencies": {
+    "@raisin/common-i18n": "workspace:*",
     "@raisin/design-tokens": "workspace:*"
   },
   "devDependencies": {
