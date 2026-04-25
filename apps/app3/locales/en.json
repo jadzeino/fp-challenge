@@ -1,0 +1,7 @@
+{
+  "home": {
+    "title": "Hello from app3",
+    "subtitle": "This page is served from app3.",
+    "go_app1": "Back to app1"
+  }
+}
