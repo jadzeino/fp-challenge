@@ -9,7 +9,9 @@
   ],
   "workspaces": {
     "packages": [
-      "packages/**"
+      "apps/*",
+      "packages/*",
+      "platform/*"
     ]
   },
   "scripts": {
@@ -18,7 +20,7 @@
     "prettify": "pnpm run -w g:prettier . --write",
     "husky:install": "npx husky install",
     "setup": "pnpm install --frozen-lockfile && pnpm build:libs",
-    "lint:css": "pnpm run -w g:stylelint '{packages,mfe,lib}/**/*.{css,less,sass,scss,ts}'",
+    "lint:css": "pnpm run -w g:stylelint '{apps,packages,platform}/**/*.{css,less,sass,scss,ts}'",
     "build:libs": "pnpm run -w g:nx run-many --target=build:library",
     "clean:libs": "nx run-many --target=build:clean --parallel=5 && pnpm clean -y && nx reset",
     "clean": "lerna clean",
