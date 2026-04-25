@@ -1,0 +1,56 @@
+{
+  "name": "@raisin/testing",
+  "version": "0.1.0",
+  "description": "Shared test utilities for the Raisin frontend platform: MSW handlers, RTL renderer with providers, fixtures",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./msw": {
+      "types": "./lib/msw/index.d.ts",
+      "default": "./lib/msw/index.js"
+    },
+    "./msw/server": {
+      "types": "./lib/msw/server.d.ts",
+      "default": "./lib/msw/server.js"
+    },
+    "./msw/browser": {
+      "types": "./lib/msw/browser.d.ts",
+      "default": "./lib/msw/browser.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:clean": "pnpm run -w g:rimraf ./lib",
+    "check-types": "pnpm run -w g:tsc",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix"
+  },
+  "dependencies": {
+    "@raisin/api-contracts": "workspace:*",
+    "@raisin/auth-client": "workspace:*",
+    "@testing-library/react": "^12.1.5",
+    "msw": "^1.3.2"
+  },
+  "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
+    "@types/node": "^20.8.7",
+    "@types/react": "17.0.47"
+  },
+  "peerDependencies": {
+    "react": "17.x",
+    "react-dom": "17.x"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}
