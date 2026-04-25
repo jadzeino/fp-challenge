@@ -1,0 +1,41 @@
+{
+  "name": "@raisin/api-contracts",
+  "version": "0.1.0",
+  "description": "Versioned API contracts (Zod schemas + types) for the Raisin frontend platform",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./v1": {
+      "types": "./lib/v1/index.d.ts",
+      "default": "./lib/v1/index.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:clean": "pnpm run -w g:rimraf ./lib",
+    "check-types": "pnpm run -w g:tsc",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix",
+    "test": "pnpm run -w g:jest"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
+    "@types/node": "^20.8.7"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}
