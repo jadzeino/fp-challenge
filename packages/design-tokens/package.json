@@ -1,0 +1,36 @@
+{
+  "name": "@raisin/design-tokens",
+  "version": "0.1.0",
+  "description": "Framework-agnostic design tokens for the Raisin frontend platform",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./tokens.json": "./tokens.json"
+  },
+  "files": [
+    "lib",
+    "tokens.json"
+  ],
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:clean": "pnpm run -w g:rimraf ./lib",
+    "check-types": "pnpm run -w g:tsc",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix",
+    "test": "pnpm run -w g:jest"
+  },
+  "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
+    "@types/node": "^20.8.7"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}
