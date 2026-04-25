@@ -1,0 +1,13 @@
+{
+  "home": {
+    "title": "Hallo aus app2",
+    "subtitle": "Diese Seite wird von app2 ausgeliefert.",
+    "go_app1": "Zurück zu app1"
+  },
+  "session": {
+    "shared_intro": "Die Anmeldung aus app1 wird hier weiterverwendet - kein erneutes Anmelden nötig.",
+    "logged_in_as": "Angemeldet als {{email}}",
+    "first_account": "Erstes Konto",
+    "go_login": "Sie sind nicht angemeldet. Öffnen Sie app1 zur Anmeldung."
+  }
+}

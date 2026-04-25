@@ -1,0 +1,13 @@
+{
+  "home": {
+    "title": "Hello from app2",
+    "subtitle": "This page is served from app2.",
+    "go_app1": "Back to app1"
+  },
+  "session": {
+    "shared_intro": "Sharing the auth session from app1 - no new login required.",
+    "logged_in_as": "Signed in as {{email}}",
+    "first_account": "First account",
+    "go_login": "You are not signed in. Open app1 to log in."
+  }
+}

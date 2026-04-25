@@ -1,43 +1,61 @@
 import React from 'react';
-import Link from 'next/link';
+import { useAuth } from '@raisin/auth-client/react';
+import { useT } from '@raisin/common-i18n';
+import { LocaleSwitcher } from '@raisin/design-system';
+import type { v1 } from '@raisin/api-contracts';
+import { logger } from '@raisin/observability';
 
-const UseCase1: React.FC = () => (
-  <div className="wrapper">
-    <div className="container">
-      <div id="welcome">
-        <h1>
-          <span>This page is served from app2</span>
-          Hey there
-        </h1>
-      </div>
-      <div id="hero" className="rounded custom-hero">
-        <div className="text-container">
-          <h2>
-            <svg
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="https://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-              />
-            </svg>
-            <span>
-              All the content on this page has been prefetched and generated into the page at build
-              time.
-            </span>
-          </h2>
-          <Link href="/" passHref>
-            <a href="replace"> Go back home </a>
-          </Link>
-        </div>
+import { getApi } from '../../platform/api';
+
+const UseCase1: React.FC = () => {
+  const t = useT();
+  const { session } = useAuth();
+  const [first, setFirst] = React.useState<v1.Account | null>(null);
+
+  React.useEffect(() => {
+    if (!session) {
+      setFirst(null);
+      return;
+    }
+    getApi()
+      .accounts.list()
+      .then((accounts) => setFirst(accounts[0] ?? null))
+      .catch((err) => logger.error('app2_accounts_failed', err));
+  }, [session]);
+
+  return (
+    <div className="wrapper">
+      <div className="container">
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1>
+            <span>{t('home.subtitle')}</span>
+            {t('home.title')}
+          </h1>
+          <LocaleSwitcher />
+        </header>
+
+        <section style={{ marginTop: 24 }}>
+          {!session && <p>{t('session.go_login')}</p>}
+          {session && (
+            <>
+              <p>{t('session.shared_intro')}</p>
+              <p>{t('session.logged_in_as', { email: session.user.email })}</p>
+              {first && (
+                <p>
+                  <strong>{t('session.first_account')}:</strong> {first.holder} —{' '}
+                  <code>{first.iban}</code>
+                </p>
+              )}
+            </>
+          )}
+        </section>
+
+        <p style={{ marginTop: 32 }}>
+          <a href="/app1">{t('home.go_app1')}</a>
+        </p>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default UseCase1;
