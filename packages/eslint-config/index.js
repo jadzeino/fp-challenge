@@ -114,6 +114,37 @@ const rules = {
   ],
   'no-undef': 0,
   'deprecation/deprecation': 'warn',
+  // Platform guardrail: barrel imports from MUI's root entry are not
+  // tree-shakeable in webpack 4/5 and pull the entire component graph
+  // into consumer bundles. Use deep imports (e.g. "@mui/material/Button")
+  // instead. The design-system package overrides this rule for its
+  // internal style files where MUI primitives are legitimately wrapped.
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: [
+        {
+          name: '@mui/material',
+          message:
+            'Use deep imports: import Button from "@mui/material/Button". Barrel imports defeat tree-shaking in Next.js / webpack and inflate consumer bundles.',
+        },
+        {
+          name: '@mui/icons-material',
+          message:
+            'Use deep imports: import AutoAwesome from "@mui/icons-material/AutoAwesome". The barrel import pulls thousands of icons.',
+        },
+        {
+          name: '@mui/lab',
+          message: 'Use deep imports: import LoadingButton from "@mui/lab/LoadingButton".',
+        },
+        {
+          name: '@mui/styles',
+          message:
+            '@mui/styles is the deprecated v4 JSS API. Use the v5 styled() from "@mui/material/styles".',
+        },
+      ],
+    },
+  ],
 };
 
 module.exports = {
