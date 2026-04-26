@@ -73,7 +73,7 @@ for (const route of routes) {
     },
   });
   app.use((req, res, next) => {
-    if (req.url === route.prefix || req.url.startsWith(route.prefix + '/')) {
+    if (req.url === route.prefix || req.url.startsWith(`${route.prefix}/`)) {
       return proxy(req, res, next);
     }
     next();
