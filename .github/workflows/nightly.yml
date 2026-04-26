@@ -1,0 +1,64 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '17 3 * * *'  # 03:17 UTC daily; offset to dodge GitHub Actions burst hours
+  workflow_dispatch: {}
+
+jobs:
+  audit:
+    name: Security audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.8
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: pnpm audit (high+ only)
+        run: pnpm audit --audit-level=high
+
+  licenses:
+    name: License check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.8
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Licence allowlist
+        # Allowed: MIT, ISC, BSD-2/3, Apache-2.0, 0BSD, CC0, Unlicense.
+        # Add to the allowlist deliberately, never silently.
+        run: pnpm dlx license-checker --production --onlyAllow "MIT;ISC;BSD-2-Clause;BSD-3-Clause;Apache-2.0;0BSD;CC0-1.0;Unlicense" --excludePackages "$(jq -r '.name' package.json)"
+
+  drift:
+    name: Dependency drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.8
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Outdated report
+        # Posts the markdown to the workflow summary so the platform team
+        # can scan it without leaving GitHub.
+        run: |
+          set +e
+          {
+            echo "## Outdated dependencies"
+            pnpm -r outdated --format markdown || true
+          } >> "$GITHUB_STEP_SUMMARY"
