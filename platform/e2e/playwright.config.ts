@@ -25,7 +25,7 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   ],
   webServer: {
-    command: 'pnpm --filter ... -r dev',
+    command: 'pnpm dev',
     cwd: '../..',
     url: `${GATEWAY_URL}/__health`,
     reuseExistingServer: true,
