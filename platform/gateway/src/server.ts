@@ -77,7 +77,9 @@ for (const route of routes) {
     if (url === route.prefix || url.startsWith(`${route.prefix}/`)) {
       // Next.js production needs basePath + '/' — normalize bare "/appN" → "/appN/"
       // so the basePath startsWith check inside Next.js routing succeeds.
-      if (url === route.prefix) req.url = `${route.prefix}/`;
+      // Dev mode is lenient and handles the bare prefix fine; skip this there
+      // to avoid a redirect loop (Next.js dev would redirect /appN/ back to /appN).
+      if (url === route.prefix && !isDev) req.url = `${route.prefix}/`;
       return proxy(req, res, next);
     }
     next();
