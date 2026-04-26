@@ -6,7 +6,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: analyzeBundle,
 });
 
+const BASE_PATH = '/app2';
+
 module.exports = withBundleAnalyzer({
+  basePath: BASE_PATH,
+  assetPrefix: BASE_PATH,
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve = {
