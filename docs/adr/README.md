@@ -13,3 +13,4 @@ Numbered, immutable records of architectural decisions. New decisions create new
 | [0007](./0007-observability.md) | Observability: provider model, redaction by default | accepted |
 | [0008](./0008-testing-strategy.md) | Testing: layered, MSW as single mock truth | accepted |
 | [0009](./0009-i18n.md) | i18n: namespace tiers, cookie-persisted locale | accepted |
+| [0010](./0010-cross-zone-shared-state.md) | Cross-zone shared state: four-tier strategy | accepted |

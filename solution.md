@@ -420,3 +420,4 @@ Full rationale is in `docs/adr/`. The most important ones:
 - [ADR 0005](docs/adr/0005-ci-strategy.md) — CI design and caching strategy
 - [ADR 0006](docs/adr/0006-design-system-and-tokens.md) — MUI barrel import problem and the structural fix
 - [ADR 0008](docs/adr/0008-testing-strategy.md) — test pyramid and MSW approach
+- [ADR 0010](docs/adr/0010-cross-zone-shared-state.md) — four-tier strategy for state that crosses zone boundaries
