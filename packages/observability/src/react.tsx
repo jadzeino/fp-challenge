@@ -12,18 +12,18 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { err: null };
+  override state: ErrorBoundaryState = { err: null };
 
   static getDerivedStateFromError(err: Error): ErrorBoundaryState {
     return { err };
   }
 
-  componentDidCatch(err: Error, info: React.ErrorInfo): void {
+  override componentDidCatch(err: Error, info: React.ErrorInfo): void {
     getProvider().captureException(err, { componentStack: info.componentStack });
     this.props.onError?.(err, info);
   }
 
-  render(): React.ReactNode {
+  override render(): React.ReactNode {
     const { err } = this.state;
     if (!err) return this.props.children;
     const { fallback } = this.props;

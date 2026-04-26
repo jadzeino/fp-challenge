@@ -1,0 +1,14 @@
+{
+  "name": "@raisin/jest-preset",
+  "version": "0.1.0",
+  "description": "Shared Jest preset for the Raisin platform - zero workspace deps to avoid cycles",
+  "private": true,
+  "main": "jest-preset.js",
+  "files": [
+    "jest-preset.js"
+  ],
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}

@@ -10,12 +10,11 @@
       "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
     },
-    "./locales/global/en.json": "./locales/global/en.json",
-    "./locales/global/de.json": "./locales/global/de.json"
+    "./locales/global/en.json": "./lib/locales/global/en.json",
+    "./locales/global/de.json": "./lib/locales/global/de.json"
   },
   "files": [
-    "lib",
-    "locales"
+    "lib"
   ],
   "scripts": {
     "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",

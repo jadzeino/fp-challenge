@@ -19,6 +19,12 @@
       "default": "./lib/node.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      "react": ["lib/react.d.ts"],
+      "node": ["lib/node.d.ts"]
+    }
+  },
   "files": [
     "lib"
   ],
@@ -32,7 +38,7 @@
   },
   "devDependencies": {
     "@raisin/eslint-config": "workspace:*",
-    "@raisin/testing": "workspace:*",
+    "@raisin/jest-preset": "workspace:*",
     "@raisin/tsconfig": "workspace:*",
     "@types/node": "^20.8.7",
     "@types/react": "17.0.47"

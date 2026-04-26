@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@raisin/eslint-config": "workspace:*",
-    "@raisin/testing": "workspace:*",
+    "@raisin/jest-preset": "workspace:*",
     "@raisin/tsconfig": "workspace:*",
     "@testing-library/react": "^12.1.5",
     "@types/node": "^20.8.7",

@@ -40,6 +40,7 @@
     "@raisin/common-i18n": "workspace:*",
     "@raisin/design-system": "workspace:^",
     "@raisin/eslint-config": "workspace:*",
+    "@raisin/jest-preset": "workspace:*",
     "@raisin/observability": "workspace:*",
     "@raisin/testing": "workspace:*",
     "@raisin/tsconfig": "workspace:*",

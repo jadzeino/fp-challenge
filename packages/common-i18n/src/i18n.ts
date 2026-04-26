@@ -1,7 +1,7 @@
-import i18n, { type i18n as I18nInstance } from 'i18next';
+import i18n, { type i18n as I18nInstance, type Resource } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import globalEn from '../locales/global/en.json';
-import globalDe from '../locales/global/de.json';
+import globalEn from './locales/global/en.json';
+import globalDe from './locales/global/de.json';
 import { readLocaleCookie } from './locale-cookie';
 
 export type SupportedLocale = 'en' | 'de';
@@ -27,7 +27,7 @@ export const createI18n = (opts: CreateI18nOptions): I18nInstance => {
   const { app, appResources, defaultLocale = 'en' } = opts;
   const namespace = `app:${app}`;
 
-  const resources: Record<SupportedLocale, Record<string, unknown>> = {
+  const resources: Resource = {
     en: { global: globalEn, [namespace]: appResources?.en ?? {} },
     de: { global: globalDe, [namespace]: appResources?.de ?? {} },
   };

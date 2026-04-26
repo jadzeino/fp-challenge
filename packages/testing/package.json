@@ -23,9 +23,15 @@
       "default": "./lib/msw/browser.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      "msw": ["lib/msw/index.d.ts"],
+      "msw/server": ["lib/msw/server.d.ts"],
+      "msw/browser": ["lib/msw/browser.d.ts"]
+    }
+  },
   "files": [
-    "lib",
-    "jest-preset.js"
+    "lib"
   ],
   "scripts": {
     "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",

@@ -8,6 +8,10 @@ packages/**/node_modules
 packages/**/dist
 packages/**/lib
 packages/**/.next
+platform/**/dist
+platform/**/lib
+apps/**/.next
+apps/**/lib
 
 # misc
 .DS_Store

@@ -1,4 +1,4 @@
-import type { LogContext, LogLevel, ObservabilityProvider } from './types';
+import type { LogLevel, ObservabilityProvider } from './types';
 
 /**
  * Default provider: emits to console with consistent shape so log
