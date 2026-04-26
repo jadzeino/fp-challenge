@@ -28,6 +28,19 @@ flowchart LR
   D -. uses .-> L
 ```
 
+## Live run screenshots
+
+Captured from [github.com/jadzeino/fp-challenge](https://github.com/jadzeino/fp-challenge/actions) — the public mirror used to validate the pipeline end-to-end.
+
+**Push to main — all jobs green:**
+
+![CI build passing](../docs/images/ci-build.png)
+
+**PR path — only affected packages run in the matrix:**
+
+![CI on PR overview](../docs/images/ci-on-pr-a.png)
+![CI on PR job detail](../docs/images/ci-on-pr-b.png)
+
 ## Why this scales
 
 | Concern | Mitigation |

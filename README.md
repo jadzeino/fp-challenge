@@ -85,6 +85,17 @@ Adding a new app = one entry in `routes.config.ts` + one app's `basePath`. No ed
 
 [`docs/ci-pipeline.md`](docs/ci-pipeline.md) has the Mermaid diagram and stage notes. [ADR 0005](docs/adr/0005-ci-strategy.md) records the trade-offs. Nightly: `pnpm audit`, license-allowlist, dependency-drift report.
 
+The screenshots below were captured from the pipeline running live at [github.com/jadzeino/fp-challenge](https://github.com/jadzeino/fp-challenge/actions).
+
+**Push to main — all jobs green:**
+
+![CI build passing on push to main](docs/images/ci-build.png)
+
+**PR path — `nx affected` matrix fires, only changed packages run:**
+
+![CI on PR — matrix overview](docs/images/ci-on-pr-a.png)
+![CI on PR — job detail](docs/images/ci-on-pr-b.png)
+
 ## How the platform pieces compose
 
 A single user action exercises every shared package:
