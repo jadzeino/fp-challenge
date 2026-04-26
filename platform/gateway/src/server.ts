@@ -54,6 +54,10 @@ for (const route of routes) {
     changeOrigin: true,
     ws: true,
     logLevel: 'silent',
+    // Express strips the prefix before handing to the proxy middleware.
+    // Next.js in production strictly requires paths to start with basePath,
+    // so we must re-prepend it here.
+    pathRewrite: (path) => route.prefix + path,
     onError: (err, _req, res) => {
       logger.warn('upstream_error', {
         prefix: route.prefix,
