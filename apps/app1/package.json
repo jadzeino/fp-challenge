@@ -30,7 +30,7 @@
     "minify:svg": "svgo -f ./src/assets/images",
     "prettify": "pnpm run -w g:prettier --ignore-path=../../.prettierignore --config=../../.prettierrc . --write",
     "setup": "pnpm -w install && pnpm run build:libs",
-    "start": "next start -p 3000"
+    "start": "next start -p ${PORT:-3000}"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.2",

@@ -5,7 +5,8 @@
   "private": true,
   "main": "dist/server.js",
   "scripts": {
-    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:library": "pnpm run build",
     "build:clean": "pnpm run -w g:rimraf ./dist",
     "check-types": "pnpm run -w g:tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",

@@ -20,13 +20,21 @@ export interface AppRoute {
 }
 
 export const routes: AppRoute[] = [
-  { prefix: '/app1', upstream: 'http://localhost:3000', description: 'Customer dashboard (app1)' },
+  {
+    prefix: '/app1',
+    upstream: process.env.UPSTREAM_APP1 ?? 'http://localhost:3000',
+    description: 'Customer dashboard (app1)',
+  },
   {
     prefix: '/app2',
-    upstream: 'http://localhost:3001',
+    upstream: process.env.UPSTREAM_APP2 ?? 'http://localhost:3001',
     description: 'Cross-zone session demo (app2)',
   },
-  { prefix: '/app3', upstream: 'http://localhost:3002', description: 'i18n demo (app3)' },
+  {
+    prefix: '/app3',
+    upstream: process.env.UPSTREAM_APP3 ?? 'http://localhost:3002',
+    description: 'i18n demo (app3)',
+  },
 ];
 
 /**
