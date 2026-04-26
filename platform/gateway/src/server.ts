@@ -16,7 +16,7 @@ const app = express();
 
 // In dev, skip logging every _next/static chunk, HMR ping, and manifest poll —
 // they bury real warnings and make the terminal unusable during demos.
-const DEV_SKIP = /\/_next\/(static|webpack-hmr|[^?]*Manifest\.json)/;
+const DEV_SKIP = /\/_next\/(static|webpack-hmr|[^?]*Manifest\.json)|\/mockServiceWorker\.js/;
 const isDev = (process.env.NODE_ENV ?? 'development') !== 'production';
 
 app.use(requestIdMiddleware());
