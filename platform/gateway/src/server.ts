@@ -54,10 +54,12 @@ for (const route of routes) {
     changeOrigin: true,
     ws: true,
     logLevel: 'silent',
-    // Express strips the prefix before handing to the proxy middleware.
-    // Next.js in production strictly requires paths to start with basePath,
-    // so we must re-prepend it here.
-    pathRewrite: (path) => route.prefix + path,
+    // Express strips the route prefix before handing the request to this
+    // middleware. In production Next.js strictly requires the basePath prefix
+    // in every URL, so we re-prepend it. In dev mode Next.js is lenient and
+    // handles the stripped path fine — applying rewrite there causes
+    // unexpected dev-server behaviour (e2e tests fail).
+    pathRewrite: isDev ? undefined : (path) => route.prefix + path,
     onError: (err, _req, res) => {
       logger.warn('upstream_error', {
         prefix: route.prefix,
