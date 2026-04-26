@@ -16,6 +16,8 @@
   },
   "scripts": {
     "postinstall": "pnpm husky:install",
+    "dev": "concurrently --kill-others --names \"gateway,app1,app2,app3\" --prefix-colors \"magenta,cyan,green,yellow\" \"pnpm --filter @raisin/gateway dev\" \"pnpm --filter @raisin/app1 dev\" \"pnpm --filter @raisin/app2 dev\" \"pnpm --filter @raisin/app3 dev\"",
+    "test": "nx run-many --target=test",
     "lint": "nx run-many --target=lint",
     "prettify": "pnpm run -w g:prettier . --write",
     "husky:install": "npx husky install",
@@ -63,6 +65,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@types/jest": "^29.5.12",
+    "concurrently": "^8.2.2",
     "husky": "^8.0.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
