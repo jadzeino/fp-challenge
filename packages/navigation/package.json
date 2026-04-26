@@ -1,0 +1,44 @@
+{
+  "name": "@raisin/navigation",
+  "version": "0.1.0",
+  "description": "Cross-zone navigation helpers for the Raisin frontend platform",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "maintainer": [
+    "platform"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:libs": "pnpm run -w g:nx run-many --target=build:library",
+    "build:clean": "pnpm run -w g:rimraf ./lib",
+    "check-types": "pnpm run -w g:tsc",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "test": "pnpm run -w g:jest",
+    "prettify": "pnpm run -w g:prettier --ignore-path=../../.prettierignore --config=../../.prettierrc . --write"
+  },
+  "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/jest-preset": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
+    "@testing-library/react": "^12.1.5",
+    "@types/node": "^20.8.7",
+    "@types/react": "17.0.47",
+    "@types/react-dom": "^17.0.13"
+  },
+  "peerDependencies": {
+    "react": "17.x",
+    "react-dom": "17.x"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  },
+  "packageManager": "pnpm@8.15.8"
+}

@@ -34,16 +34,23 @@ export const requestIdMiddleware = () => (req: ReqLike, res: ResLike, next: Next
   next();
 };
 
-export const accessLogMiddleware = () => (req: ReqLike, res: ResLike, next: Next): void => {
-  const start = Date.now();
-  res.on('finish', () => {
-    logger.info('http_access', {
-      method: req.method,
-      path: req.url,
-      status: res.statusCode,
-      latencyMs: Date.now() - start,
-      requestId: req.requestId,
+export interface AccessLogOptions {
+  /** Return true to suppress a log line. Useful in dev to skip noisy static-asset paths. */
+  skip?: (req: ReqLike) => boolean;
+}
+
+export const accessLogMiddleware = (opts: AccessLogOptions = {}) =>
+  (req: ReqLike, res: ResLike, next: Next): void => {
+    const start = Date.now();
+    res.on('finish', () => {
+      if (opts.skip?.(req)) return;
+      logger.info('http_access', {
+        method: req.method,
+        path: req.url,
+        status: res.statusCode,
+        latencyMs: Date.now() - start,
+        requestId: req.requestId,
+      });
     });
-  });
-  next();
-};
+    next();
+  };

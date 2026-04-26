@@ -39,10 +39,11 @@ export const createI18n = (opts: CreateI18nOptions): I18nInstance => {
       resources,
       lng: resolveInitialLocale(defaultLocale),
       fallbackLng: 'en',
-      defaultNS: 'global',
-      ns: ['global', namespace],
-      // App-local strings can override global keys for the same logical
-      // label by being looked up first.
+      // App namespace is the primary lookup so useT() resolves app-specific
+      // keys (home.*, accounts.*, session.*) without a namespace prefix.
+      // Global namespace is the fallback for shared keys (locale labels etc.).
+      defaultNS: namespace,
+      ns: [namespace, 'global'],
       fallbackNS: ['global'],
       interpolation: { escapeValue: false },
       returnNull: false,

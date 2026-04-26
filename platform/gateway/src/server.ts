@@ -11,8 +11,15 @@ initObservability({ app: 'gateway', env: (process.env.NODE_ENV as 'development')
 
 const app = express();
 
+// In dev, skip logging every _next/static chunk, HMR ping, and manifest poll —
+// they bury real warnings and make the terminal unusable during demos.
+const DEV_SKIP = /\/_next\/(static|webpack-hmr|[^?]*Manifest\.json)/;
+const isDev = (process.env.NODE_ENV ?? 'development') !== 'production';
+
 app.use(requestIdMiddleware());
-app.use(accessLogMiddleware());
+app.use(accessLogMiddleware({
+  skip: isDev ? (req) => DEV_SKIP.test(req.url ?? '') : undefined,
+}));
 
 // Health endpoint - JSON for monitors, HTML for humans.
 app.get('/__health', async (req, res) => {

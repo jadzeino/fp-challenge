@@ -1,5 +1,7 @@
 import React from 'react';
+import Link from 'next/link';
 import { Button } from '@raisin/design-system';
+import { CrossAppLink } from '@raisin/navigation';
 
 const UseCase1: React.FC = () => (
   <div className="wrapper">
@@ -9,6 +11,9 @@ const UseCase1: React.FC = () => (
           <span>This page is served from app1</span>
           Hey there, this is the home page
         </h1>
+        <p>
+          <Link href="/accounts">Go to accounts →</Link>
+        </p>
       </div>
       <div id="hero" className="rounded custom-hero">
         <div className="text-container">
@@ -31,10 +36,10 @@ const UseCase1: React.FC = () => (
               time.
             </span>
           </h2>
-          <Button variant="contained" href="/app2" component="a">
+          <Button variant="contained" href="/app2" component={CrossAppLink}>
             Take me to app2
           </Button>
-          <Button variant="contained" href="/app3" component="a">
+          <Button variant="contained" href="/app3" component={CrossAppLink}>
             Take me to app3
           </Button>
         </div>

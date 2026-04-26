@@ -13,6 +13,15 @@ import de from '../../locales/de.json';
 
 import './styles.css';
 
+if (process.env.NEXT_PUBLIC_USE_MOCKS === 'true' && typeof window !== 'undefined') {
+  import('@raisin/testing/msw/browser').then(({ worker }) =>
+    worker.start({
+      onUnhandledRequest: 'bypass',
+      serviceWorker: { url: '/app1/mockServiceWorker.js' },
+    }),
+  );
+}
+
 const APP_NAME = 'app1';
 
 initObservability({

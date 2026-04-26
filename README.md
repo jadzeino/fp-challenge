@@ -13,6 +13,10 @@ pnpm build:libs    # one-time build of shared TypeScript libs
 pnpm dev           # gateway + app1 + app2 + app3 in parallel
 ```
 
+> **Dev mode is intentionally slower than production.** `next dev` compiles chunks on demand
+> and disables browser caching, so cross-zone navigation feels heavier than it really is.
+> Run `pnpm build && pnpm start` for a representative perf check.
+
 Open <http://localhost:8080> -> redirects to `/app1`. Cross-zone:
 
 - `/app1/accounts` - log in, see the demo accounts table

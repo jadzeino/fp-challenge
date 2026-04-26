@@ -35,6 +35,7 @@
     "@next/bundle-analyzer": "^14.2.2",
     "@raisin/common-i18n": "workspace:*",
     "@raisin/design-system": "workspace:*",
+    "@raisin/navigation": "workspace:*",
     "@raisin/eslint-config": "workspace:*",
     "@raisin/observability": "workspace:*",
     "@raisin/tsconfig": "workspace:*",

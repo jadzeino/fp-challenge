@@ -1,4 +1,5 @@
 import React from 'react';
+import { CrossAppLink } from '@raisin/navigation';
 import { useAuth } from '@raisin/auth-client/react';
 import { useT } from '@raisin/common-i18n';
 import { LocaleSwitcher } from '@raisin/design-system';
@@ -51,7 +52,7 @@ const UseCase1: React.FC = () => {
         </section>
 
         <p style={{ marginTop: 32 }}>
-          <a href="/app1">{t('home.go_app1')}</a>
+          <CrossAppLink href="/app1">{t('home.go_app1')}</CrossAppLink>
         </p>
       </div>
     </div>

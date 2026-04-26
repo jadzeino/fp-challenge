@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@raisin/tsconfig/library.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "alwaysStrict": true,
+    "strictPropertyInitialization": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "lib", "**/__tests__/**", "**/*.test.ts", "**/*.test.tsx"]
+}
