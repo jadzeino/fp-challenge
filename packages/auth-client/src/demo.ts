@@ -11,9 +11,8 @@ import type { AuthSession, LoginCredentials } from './types';
  */
 
 const base64url = (input: string): string => {
-  const b64 = typeof Buffer !== 'undefined'
-    ? Buffer.from(input, 'utf8').toString('base64')
-    : btoa(input);
+  const b64 =
+    typeof Buffer !== 'undefined' ? Buffer.from(input, 'utf8').toString('base64') : btoa(input);
   return b64.replace(/=+$/u, '').replace(/\+/gu, '-').replace(/\//gu, '_');
 };
 

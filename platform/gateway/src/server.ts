@@ -7,7 +7,10 @@ import { checkAll, renderDownPage } from './health';
 
 const PORT = Number(process.env.GATEWAY_PORT ?? 8080);
 
-initObservability({ app: 'gateway', env: (process.env.NODE_ENV as 'development') ?? 'development' });
+initObservability({
+  app: 'gateway',
+  env: (process.env.NODE_ENV as 'development') ?? 'development',
+});
 
 const app = express();
 
@@ -17,9 +20,11 @@ const DEV_SKIP = /\/_next\/(static|webpack-hmr|[^?]*Manifest\.json)/;
 const isDev = (process.env.NODE_ENV ?? 'development') !== 'production';
 
 app.use(requestIdMiddleware());
-app.use(accessLogMiddleware({
-  skip: isDev ? (req) => DEV_SKIP.test(req.url ?? '') : undefined,
-}));
+app.use(
+  accessLogMiddleware({
+    skip: isDev ? (req) => DEV_SKIP.test(req.url ?? '') : undefined,
+  }),
+);
 
 // Health endpoint - JSON for monitors, HTML for humans.
 app.get('/__health', async (req, res) => {
@@ -50,7 +55,11 @@ for (const route of routes) {
     ws: true,
     logLevel: 'silent',
     onError: (err, _req, res) => {
-      logger.warn('upstream_error', { prefix: route.prefix, upstream: route.upstream, message: (err as Error).message });
+      logger.warn('upstream_error', {
+        prefix: route.prefix,
+        upstream: route.upstream,
+        message: (err as Error).message,
+      });
       if (!res.headersSent) {
         res.statusCode = 502;
         res.setHeader('content-type', 'text/html');

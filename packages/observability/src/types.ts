@@ -6,7 +6,7 @@ export interface LogContext {
 
 export interface ObservabilityProvider {
   captureException(err: unknown, ctx?: LogContext): void;
-  captureMessage(msg: string, level?: LogLevel, ctx?: LogContext): void;
+  captureMessage(msg: string, ctx?: LogContext, level?: LogLevel): void;
   setTags(tags: Record<string, string>): void;
 }
 

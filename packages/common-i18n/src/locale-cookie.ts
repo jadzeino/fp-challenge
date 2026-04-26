@@ -16,5 +16,7 @@ export const readLocaleCookie = (): string | null => {
 
 export const writeLocaleCookie = (locale: string): void => {
   if (!isBrowser()) return;
-  document.cookie = `${COOKIE}=${encodeURIComponent(locale)}; Max-Age=${ONE_YEAR}; Path=/; SameSite=Lax`;
+  document.cookie = `${COOKIE}=${encodeURIComponent(
+    locale,
+  )}; Max-Age=${ONE_YEAR}; Path=/; SameSite=Lax`;
 };

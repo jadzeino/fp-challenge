@@ -51,6 +51,8 @@ export const withErrorBoundary = <P extends object>(
       <Component {...props} />
     </ErrorBoundary>
   );
-  Wrapped.displayName = `withErrorBoundary(${Component.displayName ?? Component.name ?? 'Component'})`;
+  Wrapped.displayName = `withErrorBoundary(${
+    Component.displayName ?? Component.name ?? 'Component'
+  })`;
   return Wrapped;
 };

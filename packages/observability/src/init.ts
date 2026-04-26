@@ -26,7 +26,7 @@ export const getProvider = (): ObservabilityProvider => activeProvider;
 const log = (level: LogLevel, msg: string, ctx?: LogContext, err?: unknown): void => {
   const safeCtx = ctx ? redact(ctx) : undefined;
   if (err) activeProvider.captureException(err, safeCtx);
-  else activeProvider.captureMessage(msg, level, safeCtx);
+  else activeProvider.captureMessage(msg, safeCtx, level);
 };
 
 export const logger: Logger = {
@@ -39,7 +39,7 @@ export const logger: Logger = {
 /**
  * Resets internal state. For tests.
  */
-export const __resetObservability = (): void => {
+export const resetObservabilityForTests = (): void => {
   activeProvider = createConsoleProvider();
   activeAppTag = undefined;
 };

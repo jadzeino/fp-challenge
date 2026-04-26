@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { createI18n, SUPPORTED_LOCALES, type SupportedLocale, type CreateI18nOptions } from './i18n';
+import {
+  createI18n,
+  SUPPORTED_LOCALES,
+  type SupportedLocale,
+  type CreateI18nOptions,
+} from './i18n';
 import { writeLocaleCookie } from './locale-cookie';
 
 interface I18nContextValue {
@@ -20,7 +25,9 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children, ...opts })
   if (!i18nRef.current) i18nRef.current = createI18n(opts);
   const i18n = i18nRef.current;
 
-  const [locale, setLocaleState] = React.useState<SupportedLocale>(i18n.language as SupportedLocale);
+  const [locale, setLocaleState] = React.useState<SupportedLocale>(
+    i18n.language as SupportedLocale,
+  );
 
   const setLocale = React.useCallback(
     (next: SupportedLocale) => {
@@ -57,5 +64,8 @@ export const useT = (): ((key: string, vars?: Record<string, unknown>) => string
   const { t } = useTranslation();
   // Stable identity so consumers can put the result in useEffect/useCallback
   // dep arrays without triggering update loops on every render.
-  return React.useCallback((key: string, vars?: Record<string, unknown>) => t(key, vars ?? {}), [t]);
+  return React.useCallback(
+    (key: string, vars?: Record<string, unknown>) => t(key, vars ?? {}),
+    [t],
+  );
 };

@@ -1,0 +1,9 @@
+{
+  "extends": "@raisin/tsconfig/node.json",
+  "compilerOptions": {
+    "rootDir": "./tests",
+    "outDir": "./lib",
+    "types": ["node", "@playwright/test"]
+  },
+  "include": ["tests/**/*", "playwright.config.ts"]
+}

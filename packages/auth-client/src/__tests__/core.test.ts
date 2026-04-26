@@ -11,7 +11,10 @@ describe('createAuthClient (demo mode)', () => {
   });
 
   test('login stores a session and exposes a token', async () => {
-    const auth = createAuthClient({ storage: createMemoryStorage(), now: fixedNow(1_700_000_000_000) });
+    const auth = createAuthClient({
+      storage: createMemoryStorage(),
+      now: fixedNow(1_700_000_000_000),
+    });
     const session = await auth.login({ email: 'ada@raisin.test' });
     expect(session.user.email).toBe('ada@raisin.test');
     expect(auth.getToken()).toBe(session.token);

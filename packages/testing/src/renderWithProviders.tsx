@@ -27,9 +27,7 @@ export const renderWithProviders = (
   const client = authClient ?? createAuthClient({ storage: createMemoryStorage(), mode: 'demo' });
   return render(ui, {
     wrapper: ({ children }) => (
-      <AuthProvider client={client}>
-        {Extra ? <Extra>{children}</Extra> : children}
-      </AuthProvider>
+      <AuthProvider client={client}>{Extra ? <Extra>{children}</Extra> : children}</AuthProvider>
     ),
     ...opts,
   });

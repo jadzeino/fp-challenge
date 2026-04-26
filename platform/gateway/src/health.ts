@@ -33,9 +33,7 @@ const probe = (upstream: string, timeoutMs = 1500): Promise<Health> =>
     }
   });
 
-export const checkAll = async (
-  routes: AppRoute[],
-): Promise<Array<AppRoute & { health: Health }>> =>
+export const checkAll = async (routes: AppRoute[]): Promise<Array<AppRoute & { health: Health }>> =>
   Promise.all(routes.map(async (r) => ({ ...r, health: await probe(r.upstream) })));
 
 export const renderDownPage = (route: AppRoute): string => `
@@ -48,7 +46,9 @@ export const renderDownPage = (route: AppRoute): string => `
   .muted { color: #5A6580; }
 </style>
 <h1>${route.prefix} is not responding</h1>
-<p>The gateway tried to forward your request to <code>${route.upstream}</code> but no one answered.</p>
+<p>The gateway tried to forward your request to <code>${
+  route.upstream
+}</code> but no one answered.</p>
 <p class="muted">If you are running locally, make sure the dev server for this app is up:</p>
 <pre><code>pnpm --filter @raisin/${route.prefix.slice(1)} dev</code></pre>
 <p><a href="/">Back to gateway home</a></p>

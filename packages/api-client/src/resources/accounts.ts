@@ -5,7 +5,9 @@ export interface AccountsResource {
   list(): Promise<v1.AccountList>;
 }
 
-export const createAccountsResource = (request: ReturnType<typeof createRequest>): AccountsResource => ({
+export const createAccountsResource = (
+  request: ReturnType<typeof createRequest>,
+): AccountsResource => ({
   list: () =>
     request({
       resource: 'accounts.list',
