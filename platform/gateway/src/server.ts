@@ -48,18 +48,17 @@ app.get('/__health', async (req, res) => {
 
 // Wire each app behind its prefix. Health failures get a friendly page
 // instead of a raw 502 so dev DX stays sane when an app is restarting.
+//
+// We match the prefix manually instead of app.use(prefix, proxy) because
+// Express strips the matched prefix from req.url before the middleware sees
+// it. Next.js needs the full path (including its basePath) for routing in
+// both dev and production, so we forward it unchanged with no pathRewrite.
 for (const route of routes) {
   const proxy = createProxyMiddleware({
     target: route.upstream,
     changeOrigin: true,
     ws: true,
     logLevel: 'silent',
-    // Express strips the route prefix before handing the request to this
-    // middleware. In production Next.js strictly requires the basePath prefix
-    // in every URL, so we re-prepend it. In dev mode Next.js is lenient and
-    // handles the stripped path fine — applying rewrite there causes
-    // unexpected dev-server behaviour (e2e tests fail).
-    pathRewrite: isDev ? undefined : (path) => route.prefix + path,
     onError: (err, _req, res) => {
       logger.warn('upstream_error', {
         prefix: route.prefix,
@@ -73,7 +72,12 @@ for (const route of routes) {
       res.end(renderDownPage(route));
     },
   });
-  app.use(route.prefix, proxy);
+  app.use((req, res, next) => {
+    if (req.url === route.prefix || req.url.startsWith(route.prefix + '/')) {
+      return proxy(req, res, next);
+    }
+    next();
+  });
 }
 
 // Bare "/" -> default app.
