@@ -1,6 +1,5 @@
-import { Html, Head, Main, NextScript, DocumentProps, DocumentContext } from 'next/document';
 import * as React from 'react';
-import { ServerStyleSheets } from '@mui/styles';
+import { Html, Head, Main, NextScript, DocumentProps, DocumentContext } from 'next/document';
 import {
   DocumentHeadTags,
   DocumentHeadTagsProps,
@@ -23,25 +22,6 @@ export default function MyDocument(props: DocumentProps & DocumentHeadTagsProps)
 }
 
 MyDocument.getInitialProps = async (ctx: DocumentContext) => {
-  const materialUiSheets = new ServerStyleSheets();
-  const originalRenderPage = ctx.renderPage;
-
-  ctx.renderPage = () =>
-    originalRenderPage({
-      enhanceApp: (App) => (props) => materialUiSheets.collect(<App {...props} />),
-    });
-
   const initialProps = await documentGetInitialProps(ctx);
-  const lang = ctx.locale;
-
-  return {
-    ...initialProps,
-    lang,
-    styles: [
-      <React.Fragment key="styles">
-        {initialProps.styles}
-        {materialUiSheets.getStyleElement()}
-      </React.Fragment>,
-    ],
-  };
+  return { ...initialProps, lang: ctx.locale };
 };

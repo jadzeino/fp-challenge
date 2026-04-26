@@ -55,5 +55,7 @@ export const useLocale = (): I18nContextValue => {
  */
 export const useT = (): ((key: string, vars?: Record<string, unknown>) => string) => {
   const { t } = useTranslation();
-  return (key, vars) => t(key, vars ?? {});
+  // Stable identity so consumers can put the result in useEffect/useCallback
+  // dep arrays without triggering update loops on every render.
+  return React.useCallback((key: string, vars?: Record<string, unknown>) => t(key, vars ?? {}), [t]);
 };

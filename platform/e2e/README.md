@@ -9,13 +9,13 @@ Playwright end-to-end tests that exercise the platform through the gateway.
 pnpm dev   # gateway + apps
 
 # In another
-pnpm --filter @raisin/e2e test
+pnpm --filter @raisin/e2e test:e2e
 ```
 
 Or let Playwright spin up the stack itself (slower first run, no second terminal needed):
 
 ```bash
-pnpm --filter @raisin/e2e test
+pnpm --filter @raisin/e2e test:e2e
 ```
 
 The `webServer` config in `playwright.config.ts` is `reuseExistingServer: true`, so it picks up an already-running stack if one is up.

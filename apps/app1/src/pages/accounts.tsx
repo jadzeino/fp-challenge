@@ -39,7 +39,11 @@ const AccountsPage: React.FC = () => {
   React.useEffect(() => {
     if (session) refresh();
     else setLoad({ status: 'idle' });
-  }, [session, refresh]);
+    // refresh is intentionally excluded - it depends on t() which we want
+    // to be stable; including it would re-fire on every render. The session
+    // identity is the meaningful trigger for re-fetching.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
 
   return (
     <>
@@ -48,7 +52,14 @@ const AccountsPage: React.FC = () => {
       </Head>
       <div className="wrapper">
         <div className="container">
-          <header style={{ display: 'flex', alignItems: 'center', gap: 16, justifyContent: 'space-between' }}>
+          <header
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              justifyContent: 'space-between',
+            }}
+          >
             <h1>{t('accounts.title')}</h1>
             <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
               <LocaleSwitcher />

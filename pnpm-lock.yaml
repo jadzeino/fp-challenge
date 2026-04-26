@@ -271,6 +271,9 @@ importers:
       typescript:
         specifier: ~5.2.2
         version: 5.2.2
+      whatwg-fetch:
+        specifier: ^3.6.20
+        version: 3.6.20
 
   apps/app2:
     dependencies:
@@ -424,6 +427,9 @@ importers:
       '@raisin/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
+      '@raisin/jest-preset':
+        specifier: workspace:*
+        version: link:../jest-preset
       '@raisin/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -487,6 +493,9 @@ importers:
       '@raisin/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
+      '@raisin/jest-preset':
+        specifier: workspace:*
+        version: link:../jest-preset
       '@raisin/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -548,6 +557,9 @@ importers:
       '@raisin/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
+      '@raisin/jest-preset':
+        specifier: workspace:*
+        version: link:../jest-preset
       '@raisin/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -12675,6 +12687,10 @@ packages:
     deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
     dependencies:
       iconv-lite: 0.6.3
+    dev: true
+
+  /whatwg-fetch@3.6.20:
+    resolution: {integrity: sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==}
     dev: true
 
   /whatwg-mimetype@3.0.0:

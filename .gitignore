@@ -55,3 +55,5 @@ report.json
 .devcontainer
 
 .nx
+platform/e2e/test-results
+platform/e2e/playwright-report

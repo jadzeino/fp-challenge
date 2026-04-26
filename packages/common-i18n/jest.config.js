@@ -1,7 +1,6 @@
 module.exports = {
   ...require('@raisin/jest-preset'),
   rootDir: '.',
-  displayName: 'design-system',
+  displayName: 'common-i18n',
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['@testing-library/jest-dom'],
 };

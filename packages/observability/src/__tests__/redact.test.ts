@@ -15,8 +15,8 @@ describe('redact', () => {
   });
 
   test('case-insensitive on key names', () => {
-    const out = redact({ Authorization: 'Bearer xyz', SET_COOKIE: 'foo=bar' });
-    expect(out).toEqual({ Authorization: '[REDACTED]', SET_COOKIE: '[REDACTED]' });
+    const out = redact({ Authorization: 'Bearer xyz', 'Set-Cookie': 'foo=bar' });
+    expect(out).toEqual({ Authorization: '[REDACTED]', 'Set-Cookie': '[REDACTED]' });
   });
 
   test('walks arrays', () => {

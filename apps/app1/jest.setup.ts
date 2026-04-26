@@ -1,3 +1,6 @@
+// jsdom does not ship a fetch implementation; whatwg-fetch attaches one
+// to the global so api-client and MSW can both use it.
+import 'whatwg-fetch';
 import { server } from '@raisin/testing/msw/server';
 
 // Wire MSW once per Jest worker. The handlers are the same ones used in

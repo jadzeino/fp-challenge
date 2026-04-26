@@ -4,9 +4,9 @@
   "description": "Playwright end-to-end tests for the Raisin frontend platform",
   "private": true,
   "scripts": {
-    "test": "playwright test",
-    "test:headed": "playwright test --headed",
-    "test:ui": "playwright test --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
     "lint": "pnpm run -w g:eslint ./tests --cache"
   },
   "devDependencies": {

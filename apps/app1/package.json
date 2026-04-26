@@ -46,6 +46,7 @@
     "@raisin/tsconfig": "workspace:*",
     "@statoscope/webpack-plugin": "^5.28.2",
     "@testing-library/user-event": "^14.5.2",
+    "whatwg-fetch": "^3.6.20",
     "@types/node": "^20.8.7",
     "@types/react": "17.0.47",
     "@types/react-dom": "^17.0.13",

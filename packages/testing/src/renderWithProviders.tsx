@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
+import { createAuthClient, createMemoryStorage, type AuthClient } from '@raisin/auth-client';
 import { AuthProvider } from '@raisin/auth-client/react';
 
 export interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
@@ -11,21 +12,25 @@ export interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper
    *   })
    */
   extraWrapper?: React.ComponentType<{ children: React.ReactNode }>;
+  /**
+   * Optional pre-built auth client. Defaults to a fresh memory-backed
+   * client per render so tests stay isolated (the default localStorage
+   * client would leak session state across tests).
+   */
+  authClient?: AuthClient;
 }
 
-/**
- * RTL render wrapped in the platform's standard provider chain. Today
- * that is just <AuthProvider>; common-i18n and observability join the
- * chain in their respective commits without consumers needing to update
- * tests.
- */
 export const renderWithProviders = (
   ui: React.ReactElement,
-  { extraWrapper: Extra, ...opts }: RenderWithProvidersOptions = {},
-): RenderResult =>
-  render(ui, {
+  { extraWrapper: Extra, authClient, ...opts }: RenderWithProvidersOptions = {},
+): RenderResult => {
+  const client = authClient ?? createAuthClient({ storage: createMemoryStorage(), mode: 'demo' });
+  return render(ui, {
     wrapper: ({ children }) => (
-      <AuthProvider>{Extra ? <Extra>{children}</Extra> : children}</AuthProvider>
+      <AuthProvider client={client}>
+        {Extra ? <Extra>{children}</Extra> : children}
+      </AuthProvider>
     ),
     ...opts,
   });
+};
