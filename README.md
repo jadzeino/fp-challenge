@@ -1,162 +1,114 @@
 # Raisin Frontend Platform
 
-Production-shaped monorepo backing the Raisin Frontend Platform challenge. Three Next.js apps plus a shared platform layer (auth, API contracts + client, design tokens + system, i18n, observability, testing utilities) fronted by a standalone gateway so the whole stack runs at one URL.
+A production-shaped monorepo with three Next.js apps sharing a common platform layer — auth, API contracts, design system, i18n, and observability — all served from a single URL through a standalone gateway.
 
-> **On AI usage:** Claude (Anthropic) was used as an accelerator throughout — as a senior pair-programming partner, not an author. Every architectural decision, trade-off call, and final implementation choice was mine. See [solution.md](solution.md) for a full walk-through.
+> **On AI usage:** Claude (Anthropic) was used as an accelerator throughout this challenge — as a senior pair-programming partner, not an author. Every architectural decision, trade-off, and implementation choice was mine. See [solution.md](solution.md) for the full walk-through.
 
-## Architecture
+---
+
+## Architecture overview
 
 ![Platform blueprint](docs/images/blueprint-2.png)
 
+---
+
 ## Quick start
 
-Requires Node `18.20.2` (see `.nvmrc`) and pnpm `8.15.8`.
+**Requirements:** Node `18.20.2` (see `.nvmrc`) and pnpm `8.15.8`.
 
 ```bash
-nvm use            # match .nvmrc
-pnpm install
-pnpm build:libs    # one-time build of shared TypeScript libs
-pnpm dev           # gateway + app1 + app2 + app3 in parallel
+nvm use                # pins Node to 18.20.2 via .nvmrc
+pnpm install           # install all workspace dependencies
+pnpm build:libs        # compile shared TypeScript packages (one-time setup)
+pnpm dev               # start the gateway + all three apps in parallel
 ```
 
-> **Dev mode is intentionally slower than production.** `next dev` compiles chunks on demand
-> and disables browser caching, so cross-zone navigation feels heavier than it really is.
-> Run `pnpm build && pnpm start` for a representative perf check.
+Open **http://localhost:8080** — the gateway redirects you to app1.
 
-Open <http://localhost:8080> -> redirects to `/app1`. Cross-zone:
+> **Dev vs. production:** `next dev` compiles chunks on demand and disables browser caching, so cross-zone navigation feels heavier than it really is. Run `pnpm build && pnpm start` for a realistic performance check.
 
-- `/app1/accounts` - log in, see the demo accounts table
-- `/app2` - same session carries over (cross-zone SSO via shared storage + cookie)
-- `/app3` - same locale carries over (cookie scoped Path=/)
+### What to try once it's running
 
-Health: <http://localhost:8080/__health>
+| URL | What it shows |
+|---|---|
+| `http://localhost:8080/app1/accounts` | Log in, browse the accounts table |
+| `http://localhost:8080/app2` | Session carries over automatically (cross-zone SSO) |
+| `http://localhost:8080/app3` | Locale carries over automatically (cross-zone i18n) |
+| `http://localhost:8080/__health` | Gateway health — JSON or human-readable HTML |
 
-## What's where
+---
+
+## Repo structure
 
 ```
-apps/                    consumer apps (app1, app2, app3)
-packages/                shared platform libs
-  api-contracts          Zod schemas + types (versioned: v1, v2, ...)
-  api-client             auth-aware typed client built on contracts
-  auth-client            token mgmt + refresh + React adapter
-  design-tokens          framework-agnostic JSON tokens
-  design-system          React+MUI components consuming tokens
-  common-i18n            i18n provider + global+app namespaces (en/de)
-  observability          Sentry-shaped wrapper + logger + boundary
-  testing                MSW handlers + renderWithProviders + fixtures
-  eslint-config          shared ESLint preset (incl. MUI-barrel guardrail)
-  tsconfig               base + presets (next/library/node)
+apps/
+  app1 (:3000)             first consumer app
+  app2 (:3001)             second consumer app
+  app3 (:3002)             third consumer app
+
+packages/                  shared platform libraries
+  api-contracts            Zod schemas + TypeScript types, versioned (v1, v2…)
+  api-client               auth-aware typed fetch client
+  auth-client              token store, silent refresh, cross-tab sync
+  design-tokens            framework-agnostic JSON design tokens
+  design-system            React + MUI components consuming tokens
+  common-i18n              i18next provider, global + per-app namespaces
+  observability            Sentry-shaped logger, error boundary, request-ID middleware
+  navigation               CrossAppLink with prefetch hints for cross-zone nav
+  testing                  MSW handlers, renderWithProviders, typed fixtures
+  eslint-config            shared ESLint rules (MUI barrel-import guardrail)
+  tsconfig                 base config presets (next / library / node)
+
 platform/
-  gateway                standalone path-based HTTP gateway
-  e2e                    Playwright tests against the gateway
+  gateway                  Express + http-proxy-middleware path-based proxy
+  e2e                      Playwright tests against the live gateway
+
 docs/
-  adr/                   numbered, immutable decisions (0001-0009)
-  architecture.md        platform overview + scaling story
-  ci-pipeline.md         CI mermaid diagram + stage notes
-.github/workflows/       ci.yml + nightly.yml
+  adr/                     numbered Architecture Decision Records (0001–0010)
+  architecture.md          system design, principles, request flow, scaling story
+  ci-pipeline.md           CI diagram, stage reference, nightly
 ```
 
-## The take-home tasks (and where they're solved)
+---
 
-### Task 1 - Performance: app1 was slow
-
-The `Button` in the shared library (`@raisin/lib1`) used barrel imports from `@mui/material` which Next 12 / webpack does not reliably tree-shake. It also forced the `@mui/icons-material` AutoAwesome icon into every consumer and hardcoded `autoFocus` + a no-op `onClick` (which silently broke every caller's handler — that is why the "Take me to app2/3" buttons did nothing).
-
-Fix:
-
-1. Renamed `lib1` -> `@raisin/design-system` and made it consume `@raisin/design-tokens`.
-2. Switched to deep imports: `@mui/material/Button`, `@mui/material/styles`. ([Button source](packages/design-system/src/components/Button/index.tsx))
-3. Removed the hardcoded `autoFocus` / `onClick={() => undefined}` and forwarded all props.
-4. Enabled Next.js `modularizeImports` for `@mui/material`, `@mui/icons-material`, `@mui/lab` ([app1/next.config.js](apps/app1/next.config.js)).
-5. **Guardrail**: ESLint `no-restricted-imports` in [`@raisin/eslint-config`](packages/eslint-config/index.js) blocks future barrel imports across the platform with an error message that tells you exactly what to write instead.
-
-The platform lesson — recorded in [ADR 0006](docs/adr/0006-design-system-and-tokens.md) — is that this class of regression is now structurally impossible, not just code-review-caught.
-
-### Task 2 - Run all apps under one host:port
-
-`platform/gateway/` is a small Express + `http-proxy-middleware` service:
-
-- Routes `/app1/*`, `/app2/*`, `/app3/*` to their dev servers via a declarative `routes.config.ts`.
-- WebSocket-aware (Next.js HMR works through the gateway).
-- Returns a friendly down-page when an upstream is offline (no raw 502).
-- Exposes `/__health` for monitors.
-
-Each app sets `basePath` and `assetPrefix` so its routes and assets resolve through the gateway path.
-
-Adding a new app = one entry in `routes.config.ts` + one app's `basePath`. No edits to other apps. No primary-zone redeploys. [ADR 0002](docs/adr/0002-app-integration-gateway.md) records why this beats Next.js Multi-Zones at scale.
-
-### Task 3 - CI
-
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs `nx affected` on a matrix of `lint | check-types | test | build` with layered caching (pnpm store + nx cache by lockfile + sha). A separate `contracts` job typechecks `@raisin/api-contracts`, runs its tests, and gates breaking schema changes behind a label. Playwright e2e runs on PRs and main; per-PR previews are stubbed for the production deploy step.
-
-[`docs/ci-pipeline.md`](docs/ci-pipeline.md) has the Mermaid diagram and stage notes. [ADR 0005](docs/adr/0005-ci-strategy.md) records the trade-offs. Nightly: `pnpm audit`, license-allowlist, dependency-drift report.
-
-The screenshots below were captured from the pipeline running live at [github.com/jadzeino/fp-challenge](https://github.com/jadzeino/fp-challenge/actions).
-
-**Push to main — all jobs green:**
-
-![CI build passing on push to main](docs/images/ci-build.png)
-
-**PR path — `nx affected` matrix fires, only changed packages run:**
-
-![CI on PR — matrix overview](docs/images/ci-on-pr-a.png)
-![CI on PR — job detail](docs/images/ci-on-pr-b.png)
-
-## How the platform pieces compose
-
-A single user action exercises every shared package:
-
-```
-User -> /app1/accounts (via gateway)
-  -> AuthProvider hydrates from localStorage  [auth-client]
-  -> useAuth() exposes session                 [auth-client/react]
-  -> getApi().accounts.list()                  [api-client]
-       -> refreshIfExpiring() ensures token    [auth-client]
-       -> Authorization: Bearer + X-Request-ID [api-client + observability/node]
-       -> Zod validates response               [api-contracts]
-       -> typed v1.Account[]
-  -> table rendered with t('...')              [common-i18n]
-  -> LocaleSwitcher persists locale in cookie  [design-system + common-i18n]
-  -> Errors -> ErrorBoundary -> provider      [observability/react]
-  -> User clicks "Take me to app2"
-  -> hard navigation through gateway          [gateway]
-  -> app2 hydrates with same session + locale [auth-client storage + i18n cookie]
-```
-
-The Playwright e2e ([`platform/e2e/tests/auth-flow.spec.ts`](platform/e2e/tests/auth-flow.spec.ts)) pins both cross-zone behaviors.
-
-## Tests
+## Running tests
 
 ```bash
-pnpm test                              # nx run-many --target=test
-pnpm --filter @raisin/api-contracts test
-pnpm --filter @raisin/e2e test         # boots the stack via webServer if needed
+pnpm test                              # all unit + integration tests via nx run-many
+pnpm --filter @raisin/e2e test         # Playwright e2e (needs pnpm dev running)
+pnpm nx run @raisin/app1:check-types   # type-check one package
+pnpm nx run-many --target=lint         # lint all packages
 ```
 
-Test types are documented in [ADR 0008](docs/adr/0008-testing-strategy.md). Every shared package ships with at least one real test.
+---
 
 ## Conventions
 
-- Conventional Commits (`feat`, `fix`, `chore`, `perf`, `docs`, `test`, `ci`), scoped per package.
-- One package = one focused commit. Atomic rules out "while-I-was-here" cleanup.
-- Node 18.20.2 + pnpm 8.15.8 enforced via `engines` and `packageManager`.
-- All MUI imports must be deep (lint-enforced).
+- **Commits:** Conventional Commits format (`feat`, `fix`, `chore`, `perf`, `docs`, `test`, `ci`) scoped per package.
+- **MUI imports:** deep paths only (`@mui/material/Button`, not `@mui/material`). Lint-enforced as a CI error.
+- **Toolchain:** Node 18.20.2 + pnpm 8.15.8 pinned via `.nvmrc`, `engines`, and `packageManager` across all packages.
+- **One package per commit** — keeps the change scope reviewable and the git log navigable.
+
+---
 
 ## Known technical debt
 
-| Item | Status | Notes |
+| Item | Blocker | Path forward |
 |---|---|---|
-| Node.js 18 (EOL April 2025) | Needs upgrade | Blocked by Next.js 12; upgrade Next first |
-| Next.js 12 (3 majors behind) | Needs upgrade | Next 14 supports Pages Router; incremental migration |
-| Dependabot | Not configured | Add `.github/dependabot.yml` for weekly dep PRs |
-| `staging` / `demo` deploy stages | Not wired | `staging` type exists in observability; needs a deploy target |
-| Babel configs + unused packages | Dead weight | `babel.config.js`, `.babelrc.js`, `lerna`, `react-hot-loader` — see [solution.md](solution.md) |
+| Node.js 18 (EOL April 2025) | Blocked by Next.js 12 | Upgrade Next 12 → 14, then Node 18 → 24 |
+| Next.js 12 (3 majors behind) | Pages Router migration needed | Next 14 still supports Pages Router; incremental upgrade is safe |
+| Dependabot not configured | — | Add `.github/dependabot.yml` for weekly dependency PRs |
+| Preview / staging deploys are stubs | — | Wire to Vercel or a k8s namespace per PR |
+| Dead files: `babel.config.js`, `lerna`, `react-hot-loader` | — | Remove in a dedicated cleanup PR — full list in [solution.md](solution.md) |
+
+---
 
 ## Where to read next
 
-- [`solution.md`](solution.md) — full challenge walk-through, key decision rationale, reviewer Q&A, new-developer guide
-- [`docs/architecture.md`](docs/architecture.md) — top-level map, principles, end-to-end request flow, scaling story
-- [`docs/adr/`](docs/adr/) — numbered decisions (read 0002 + 0005 first)
-- [`docs/ci-pipeline.md`](docs/ci-pipeline.md) — CI diagram + stage notes
-- [`CONTRIBUTORS.md`](CONTRIBUTORS.md) — contribution guidelines
-- Each package has its own `README.md` covering authoring rules and gotchas.
+| Document | What you'll find |
+|---|---|
+| [solution.md](solution.md) | What was broken, how it was fixed, deep Q&A on every key decision |
+| [docs/architecture.md](docs/architecture.md) | System design, principles, full request flow, scaling story |
+| [docs/ci-pipeline.md](docs/ci-pipeline.md) | CI diagram, stage walkthrough, caching strategy, nightly |
+| [docs/adr/](docs/adr/) | Numbered, immutable decision records — start with [ADR 0002](docs/adr/0002-app-integration-gateway.md) and [ADR 0005](docs/adr/0005-ci-strategy.md) |
+| [CONTRIBUTORS.md](CONTRIBUTORS.md) | How to add a new feature, package, or app; PR guidelines |
