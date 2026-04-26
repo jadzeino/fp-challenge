@@ -131,3 +131,4 @@ Test types are documented in [ADR 0008](docs/adr/0008-testing-strategy.md). Ever
 - [`docs/adr/`](docs/adr/) — numbered decisions (read 0002 + 0005 first)
 - [`docs/ci-pipeline.md`](docs/ci-pipeline.md) — CI diagram + stage notes
 - Each package has its own `README.md` covering authoring rules and gotchas.
+
