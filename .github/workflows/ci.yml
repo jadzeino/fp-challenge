@@ -1,0 +1,159 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  PNPM_VERSION: 8.15.8
+  NX_BRANCH: ${{ github.event.number || github.ref_name }}
+  NX_RUN_GROUP: ${{ github.run_id }}
+
+jobs:
+  setup:
+    name: Setup & install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # nx affected needs history
+      - uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Cache nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            nx-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            nx-${{ runner.os }}-
+
+  affected:
+    name: ${{ matrix.target }} (affected)
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [lint, check-types, test, build]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            nx-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            nx-${{ runner.os }}-
+      - name: Build shared libraries
+        if: matrix.target == 'build' || matrix.target == 'check-types'
+        run: pnpm build:libs
+      - name: Run nx affected --target=${{ matrix.target }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm nx affected --target=${{ matrix.target }} --base=origin/main --parallel=3
+          else
+            pnpm nx run-many --target=${{ matrix.target }} --parallel=3
+          fi
+
+  contracts:
+    name: Contract validation
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck contracts
+        run: pnpm --filter @raisin/api-contracts check-types
+      - name: Run contract tests
+        run: pnpm --filter @raisin/api-contracts test
+      - name: Detect breaking schema changes
+        if: github.event_name == 'pull_request'
+        run: |
+          # Heuristic: if api-contracts/src/v1/* changed and the version
+          # in package.json did not bump, require the breaking-change-approved
+          # label. Replace with api-extractor for richer semver detection.
+          set -eu
+          BASE=origin/main
+          git fetch origin main --depth=1
+          if git diff --quiet "$BASE"...HEAD -- packages/api-contracts/src/v1; then
+            echo "no v1 contract changes"; exit 0
+          fi
+          if [ "${{ contains(github.event.pull_request.labels.*.name, 'breaking-change-approved') }}" = "true" ]; then
+            echo "breaking-change-approved label present; allowing"; exit 0
+          fi
+          echo "v1 contracts changed - require 'breaking-change-approved' label OR a version bump"
+          exit 1
+
+  e2e:
+    name: Playwright e2e
+    needs: [affected, contracts]
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @raisin/e2e exec playwright install --with-deps chromium
+      - run: pnpm build:libs
+      - run: pnpm --filter @raisin/e2e test
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: platform/e2e/playwright-report
+          retention-days: 7
+
+  preview:
+    name: Preview deploy
+    needs: [affected, contracts]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stub - per-app preview deploy
+        run: |
+          echo "Preview deploys would happen here per affected app."
+          echo "Today: stub. Tomorrow: deploy each affected app to a per-PR"
+          echo "ephemeral env (Vercel preview / Netlify / k8s namespace),"
+          echo "fronted by an ephemeral gateway pinned to those previews."
+          echo "Comment the preview URLs back on the PR."
