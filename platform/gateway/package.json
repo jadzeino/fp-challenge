@@ -1,0 +1,32 @@
+{
+  "name": "@raisin/gateway",
+  "version": "0.1.0",
+  "description": "Path-based HTTP gateway that fronts every Raisin frontend app on a single host:port",
+  "private": true,
+  "main": "dist/server.js",
+  "scripts": {
+    "build:library": "pnpm run build:clean && pnpm run -w g:tsc --build \"./tsconfig.json\"",
+    "build:clean": "pnpm run -w g:rimraf ./dist",
+    "check-types": "pnpm run -w g:tsc",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "start": "node dist/server.js",
+    "lint": "pnpm run -w g:eslint ./src --cache",
+    "lint:fix": "pnpm run -w g:eslint ./src --fix"
+  },
+  "dependencies": {
+    "@raisin/observability": "workspace:*",
+    "express": "^4.19.2",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "devDependencies": {
+    "@raisin/eslint-config": "workspace:*",
+    "@raisin/tsconfig": "workspace:*",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.8.7",
+    "ts-node-dev": "^2.0.0"
+  },
+  "engines": {
+    "node": "18.20.2",
+    "pnpm": "8.15.8"
+  }
+}
