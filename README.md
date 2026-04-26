@@ -4,6 +4,10 @@ Production-shaped monorepo backing the Raisin Frontend Platform challenge. Three
 
 > **On AI usage:** Claude (Anthropic) was used as an accelerator throughout — as a senior pair-programming partner, not an author. Every architectural decision, trade-off call, and final implementation choice was mine. See [solution.md](solution.md) for a full walk-through.
 
+## Architecture
+
+![Platform blueprint](docs/images/blueprint-2.png)
+
 ## Quick start
 
 Requires Node `18.20.2` (see `.nvmrc`) and pnpm `8.15.8`.
@@ -138,10 +142,21 @@ Test types are documented in [ADR 0008](docs/adr/0008-testing-strategy.md). Ever
 - Node 18.20.2 + pnpm 8.15.8 enforced via `engines` and `packageManager`.
 - All MUI imports must be deep (lint-enforced).
 
+## Known technical debt
+
+| Item | Status | Notes |
+|---|---|---|
+| Node.js 18 (EOL April 2025) | Needs upgrade | Blocked by Next.js 12; upgrade Next first |
+| Next.js 12 (3 majors behind) | Needs upgrade | Next 14 supports Pages Router; incremental migration |
+| Dependabot | Not configured | Add `.github/dependabot.yml` for weekly dep PRs |
+| `staging` / `demo` deploy stages | Not wired | `staging` type exists in observability; needs a deploy target |
+| Babel configs + unused packages | Dead weight | `babel.config.js`, `.babelrc.js`, `lerna`, `react-hot-loader` — see [solution.md](solution.md) |
+
 ## Where to read next
 
 - [`solution.md`](solution.md) — full challenge walk-through, key decision rationale, reviewer Q&A, new-developer guide
 - [`docs/architecture.md`](docs/architecture.md) — top-level map, principles, end-to-end request flow, scaling story
 - [`docs/adr/`](docs/adr/) — numbered decisions (read 0002 + 0005 first)
 - [`docs/ci-pipeline.md`](docs/ci-pipeline.md) — CI diagram + stage notes
+- [`CONTRIBUTORS.md`](CONTRIBUTORS.md) — contribution guidelines
 - Each package has its own `README.md` covering authoring rules and gotchas.

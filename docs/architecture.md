@@ -1,5 +1,7 @@
 # Platform Architecture
 
+![Platform blueprint](../docs/images/blueprint-2.png)
+
 This document is the top-level map. For specific decisions, follow the links to the [ADRs](./adr/README.md). For CI mechanics, see [ci-pipeline.md](./ci-pipeline.md).
 
 ## Layout

@@ -195,6 +195,134 @@ When `outDir` is set in a TypeScript config, TS needs `rootDir` to be explicit s
 
 ---
 
+## Outdated versions — known technical debt
+
+### Node.js 18 is past end-of-life
+
+The repo is pinned to **Node 18.20.2** via `.nvmrc` and `engines` in every `package.json`. Node 18 LTS reached end-of-life in **April 2025** — it no longer receives security patches. The current LTS is **Node 24**.
+
+The blocker for upgrading is **Next.js 12**: it officially supports Node 12–18. A Node upgrade must go hand-in-hand with a Next.js upgrade.
+
+**Planned path:**
+1. Upgrade Next.js 12 → 14 (App Router optional, Pages Router is compatible).
+2. Update `.nvmrc`, all `engines` fields, and the CI `node-version-file` to the new version.
+3. Run the full test suite and e2e to catch any Node API differences.
+4. Drop `react-hot-loader` (incompatible with Next 13+, and superseded by Next's built-in Fast Refresh).
+
+### Next.js 12 is three major versions behind
+
+Next.js is currently at **v14** (stable) / **v15** (RC). Next 12 misses: App Router, React Server Components, Turbopack, improved image optimisation, and middleware improvements. The upgrade is not trivial (especially the `_app.tsx` → `layout.tsx` shift for App Router) but Pages Router is still supported through Next 14, making an incremental upgrade safe.
+
+---
+
+## Deployment stages
+
+Currently two stages are wired:
+
+| Stage | Where | Notes |
+|---|---|---|
+| `development` | Local (`pnpm dev`) | Live-reload, MSW mocks, dev-mode Next.js |
+| `production` | CI stub (`.github/workflows/ci.yml`) | Build verified, deploy step is a placeholder |
+
+**Planned additions:**
+
+- **`staging`** — mirrors production config, seeded with realistic fixture data, used for QA sign-off before releases. The `NODE_ENV` type in `@raisin/observability` already includes `'staging'`; it just needs a deploy target and environment variables.
+- **`demo`** — always-on environment with fixture data, no auth required, used for client demos and stakeholder reviews. Would use MSW in browser mode (`NEXT_PUBLIC_USE_MOCKS=true`) so no backend dependency.
+
+---
+
+## Dependabot
+
+Not configured yet. Adding `.github/dependabot.yml` would auto-open PRs for outdated dependencies on a weekly schedule. Given the known Node 18 and Next.js 12 debt, Dependabot would surface upgrade opportunities automatically.
+
+Planned config (one-file addition):
+
+```yaml
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      platform:
+        patterns: ["nx", "typescript", "ts-jest"]
+      mui:
+        patterns: ["@mui/*"]
+```
+
+Grouping related deps prevents a flood of single-package PRs and keeps the upgrade scope reviewable.
+
+---
+
+## Future: CLI to scaffold a new team or project
+
+Today adding a new app is a manual 6-step process (described in the new developer guide above). The next platform-level upgrade is a CLI generator that automates it and supports multiple frameworks.
+
+**Proposed approach — Nx workspace generator:**
+
+```
+packages/
+  generators/
+    new-app/
+      schema.json      # prompts: name, framework, port
+      index.ts         # generator logic
+```
+
+The generator would:
+1. Ask for app name, framework choice (Next.js / Vite+React / Vue / Angular), and port.
+2. Copy the right template from `packages/generators/templates/<framework>/`.
+3. Write `basePath` and `assetPrefix` into the new app's config.
+4. Append the route entry to `platform/gateway/src/routes.config.ts`.
+5. Add the `dev` command to the root `concurrently` script.
+6. Run `pnpm install` automatically.
+
+**Run it with:**
+```bash
+pnpm nx g @raisin/generators:new-app
+```
+
+Supporting Angular adds complexity (different module system, zone.js), but Nx has first-class Angular support via `@nx/angular` so the scaffolding layer is handled — the custom generator only needs to wire the gateway entry and shared packages.
+
+---
+
+## Unused files, scripts, and packages
+
+These exist in the repo today but are not needed and should be removed in a follow-up cleanup PR.
+
+### Files
+
+| File | Why it can be removed |
+|---|---|
+| `babel.config.js` (root) | Uses `@babel/preset-env` + `react-hot-loader/babel`. Next.js uses its own SWC compiler — this file is never read for app compilation or Jest (which uses ts-jest). |
+| `apps/app1/.babelrc.js` | Contains only `presets: ['next/babel']`. Next.js applies this automatically; the file is redundant. |
+| `apps/app2/.babelrc.js` | Same as above. |
+| `apps/app3/.babelrc.js` | Same as above. |
+| `packages/design-system/.babelrc.js` | Same pattern — design-system is compiled by `tsc`, not babel. |
+
+### Root `package.json` scripts
+
+| Script | Why it can be removed |
+|---|---|
+| `"clean": "lerna clean"` | Only usage of Lerna in the repo. Replace with `pnpm -r exec -- rm -rf node_modules` or just `pnpm store prune`. |
+| `"g:watch"` | Registered as a convenience alias but never called by any package script. |
+
+### Root `package.json` packages
+
+| Package | Location | Why it can be removed |
+|---|---|---|
+| `lerna` | `dependencies` | Only used for `lerna clean`. Lerna adds no value here — pnpm + Nx handle all monorepo operations. |
+| `@babel/preset-env` | `devDependencies` | Only referenced in `babel.config.js` which is dead (see above). |
+| `@babel/preset-react` | `devDependencies` | Same. |
+| `@babel/plugin-proposal-class-properties` | `devDependencies` | Same. This proposal is now part of the ECMAScript standard; the plugin itself warns it is deprecated. |
+| `react-hot-loader` | `devDependencies` | Referenced in `babel.config.js`. HMR in Next.js is handled by Fast Refresh, not `react-hot-loader`. Incompatible with Next 13+. |
+| `watch` | `devDependencies` | Registered as `g:watch` alias, never called. |
+| `postcss-styled-syntax` | `devDependencies` | Stylelint plugin for CSS-in-JS. This repo has no CSS-in-JS; pure MUI `sx` prop / theme. |
+| `react-hot-loader` | `dependencies` (root) | Listed in both `dependencies` and `devDependencies` — duplicate. |
+
+---
+
 ## Getting started — new developer guide
 
 ### Prerequisites
