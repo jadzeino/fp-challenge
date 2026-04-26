@@ -73,7 +73,11 @@ for (const route of routes) {
     },
   });
   app.use((req, res, next) => {
-    if (req.url === route.prefix || req.url.startsWith(`${route.prefix}/`)) {
+    const url = req.url ?? '/';
+    if (url === route.prefix || url.startsWith(`${route.prefix}/`)) {
+      // Next.js production needs basePath + '/' — normalize bare "/appN" → "/appN/"
+      // so the basePath startsWith check inside Next.js routing succeeds.
+      if (url === route.prefix) req.url = `${route.prefix}/`;
       return proxy(req, res, next);
     }
     next();

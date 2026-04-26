@@ -11,6 +11,7 @@ const BASE_PATH = '/app3';
 module.exports = withBundleAnalyzer({
   basePath: BASE_PATH,
   assetPrefix: BASE_PATH,
+  trailingSlash: true,
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve = {
