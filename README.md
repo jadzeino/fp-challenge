@@ -2,6 +2,8 @@
 
 Production-shaped monorepo backing the Raisin Frontend Platform challenge. Three Next.js apps plus a shared platform layer (auth, API contracts + client, design tokens + system, i18n, observability, testing utilities) fronted by a standalone gateway so the whole stack runs at one URL.
 
+> **On AI usage:** Claude (Anthropic) was used as an accelerator throughout — as a senior pair-programming partner, not an author. Every architectural decision, trade-off call, and final implementation choice was mine. See [solution.md](solution.md) for a full walk-through.
+
 ## Quick start
 
 Requires Node `18.20.2` (see `.nvmrc`) and pnpm `8.15.8`.
@@ -138,6 +140,7 @@ Test types are documented in [ADR 0008](docs/adr/0008-testing-strategy.md). Ever
 
 ## Where to read next
 
+- [`solution.md`](solution.md) — full challenge walk-through, key decision rationale, reviewer Q&A, new-developer guide
 - [`docs/architecture.md`](docs/architecture.md) — top-level map, principles, end-to-end request flow, scaling story
 - [`docs/adr/`](docs/adr/) — numbered decisions (read 0002 + 0005 first)
 - [`docs/ci-pipeline.md`](docs/ci-pipeline.md) — CI diagram + stage notes
