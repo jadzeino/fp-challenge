@@ -31,8 +31,12 @@ const UseCase1: React.FC = () => (
               time.
             </span>
           </h2>
-          <Button variant="contained">Take me to app2</Button>
-          <Button variant="contained">Take me to app3</Button>
+          <Button variant="contained" href="/app2" component="a">
+            Take me to app2
+          </Button>
+          <Button variant="contained" href="/app3" component="a">
+            Take me to app3
+          </Button>
         </div>
       </div>
     </div>
