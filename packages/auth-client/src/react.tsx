@@ -21,7 +21,8 @@ export interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ client: provided, children }) => {
   const clientRef = React.useRef<AuthClient | null>(null);
   if (!clientRef.current) {
-    clientRef.current = provided ?? createAuthClient({ storage: createDefaultStorage(), mode: 'demo' });
+    clientRef.current =
+      provided ?? createAuthClient({ storage: createDefaultStorage(), mode: 'demo' });
   }
   const client = clientRef.current;
 

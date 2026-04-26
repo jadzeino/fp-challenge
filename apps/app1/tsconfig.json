@@ -10,7 +10,8 @@
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "types": ["node", "react", "@testing-library/jest-dom"]
   },
   "include": [
     "./src/**/*"

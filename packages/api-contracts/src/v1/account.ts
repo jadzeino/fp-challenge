@@ -9,7 +9,10 @@ export const AccountSchema = z.object({
     .string()
     .min(15)
     .max(34)
-    .regex(/^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/, 'IBAN must start with two letters, two digits, then alphanumerics'),
+    .regex(
+      /^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/,
+      'IBAN must start with two letters, two digits, then alphanumerics',
+    ),
   holder: z.string().min(1).max(120),
   balance: z.number().finite(),
   currency: CurrencyCodeSchema,

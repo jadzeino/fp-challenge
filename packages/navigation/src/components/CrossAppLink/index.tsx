@@ -17,10 +17,7 @@ export interface CrossAppLinkProps extends React.AnchorHTMLAttributes<HTMLAnchor
  *   <Button component={CrossAppLink} href="/app2">Go to app2</Button>
  */
 export const CrossAppLink = React.forwardRef<HTMLAnchorElement, CrossAppLinkProps>(
-  function CrossAppLink(
-    { href, prefetch = true, onMouseEnter, onFocus, children, ...rest },
-    ref,
-  ) {
+  function CrossAppLink({ href, prefetch = true, onMouseEnter, onFocus, children, ...rest }, ref) {
     const triggerPrefetch = usePrefetchCrossApp(href, { enabled: prefetch });
 
     return (

@@ -1,9 +1,5 @@
 export { createAuthClient } from './core';
-export {
-  createMemoryStorage,
-  createLocalStorageStorage,
-  createDefaultStorage,
-} from './storage';
+export { createMemoryStorage, createLocalStorageStorage, createDefaultStorage } from './storage';
 export type {
   AuthClient,
   AuthMode,

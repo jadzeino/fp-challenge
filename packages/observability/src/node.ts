@@ -26,20 +26,23 @@ type Next = (err?: unknown) => void;
 
 const HEADER = 'x-request-id';
 
-export const requestIdMiddleware = () => (req: ReqLike, res: ResLike, next: Next): void => {
-  const incoming = req.headers[HEADER];
-  const id = (typeof incoming === 'string' && incoming) || randomUUID();
-  req.requestId = id;
-  res.setHeader('X-Request-ID', id);
-  next();
-};
+export const requestIdMiddleware =
+  () =>
+  (req: ReqLike, res: ResLike, next: Next): void => {
+    const incoming = req.headers[HEADER];
+    const id = (typeof incoming === 'string' && incoming) || randomUUID();
+    req.requestId = id;
+    res.setHeader('X-Request-ID', id);
+    next();
+  };
 
 export interface AccessLogOptions {
   /** Return true to suppress a log line. Useful in dev to skip noisy static-asset paths. */
   skip?: (req: ReqLike) => boolean;
 }
 
-export const accessLogMiddleware = (opts: AccessLogOptions = {}) =>
+export const accessLogMiddleware =
+  (opts: AccessLogOptions = {}) =>
   (req: ReqLike, res: ResLike, next: Next): void => {
     const start = Date.now();
     res.on('finish', () => {

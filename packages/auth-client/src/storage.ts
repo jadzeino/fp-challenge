@@ -4,7 +4,8 @@ const LS_KEY = 'raisin.auth.session';
 
 type Listener = (session: AuthSession | null) => void;
 
-const isBrowser = (): boolean => typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+const isBrowser = (): boolean =>
+  typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 
 export const createMemoryStorage = (): AuthStorage => {
   let session: AuthSession | null = null;
@@ -60,4 +61,4 @@ export const createLocalStorageStorage = (): AuthStorage => {
  * This is what most apps want; SSR safety is handled transparently.
  */
 export const createDefaultStorage = (): AuthStorage =>
-  (isBrowser() ? createLocalStorageStorage() : createMemoryStorage());
+  isBrowser() ? createLocalStorageStorage() : createMemoryStorage();

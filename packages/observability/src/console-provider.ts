@@ -24,7 +24,7 @@ export const createConsoleProvider = (): ObservabilityProvider => {
         ctx,
       });
     },
-    captureMessage(msg, level = 'info', ctx) {
+    captureMessage(msg, ctx, level = 'info') {
       emit(level, { kind: 'message', message: msg, ctx });
     },
     setTags(next) {
