@@ -2,7 +2,6 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@raisin/tsconfig/next.json",
   "compilerOptions": {
-    "baseUrl": "./src",
     "target": "ESNext",
     "noEmitOnError": true,
     "noImplicitReturns": true,
@@ -10,8 +9,16 @@
     "emitDecoratorMetadata": true,
     "preserveConstEnums": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "moduleResolution": "node"
   },
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules", ".next", "dist", "lib"]
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "lib"
+  ]
 }

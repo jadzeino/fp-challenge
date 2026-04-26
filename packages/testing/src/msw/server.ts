@@ -9,4 +9,4 @@ import { handlers } from './handlers';
  *   afterEach(() => server.resetHandlers());
  *   afterAll(() => server.close());
  */
-export const server = setupServer(...handlers);
+export const server: ReturnType<typeof setupServer> = setupServer(...handlers);

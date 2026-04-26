@@ -31,7 +31,7 @@ module.exports = {
         // Force JSX -> JS transform regardless of the consumer tsconfig
         // (Next apps use jsx: "preserve" which leaves <Tag/> in the output
         // and breaks Jest's parser).
-        tsconfig: { jsx: 'react', esModuleInterop: true, isolatedModules: true },
+        tsconfig: { jsx: 'react', esModuleInterop: true, isolatedModules: true, module: 'CommonJS' },
         diagnostics: { ignoreCodes: [151001] },
       },
     ],

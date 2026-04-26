@@ -11,4 +11,4 @@ import { handlers } from './handlers';
  *
  * Requires public/mockServiceWorker.js (run `pnpm msw init public/`).
  */
-export const worker = setupWorker(...handlers);
+export const worker: ReturnType<typeof setupWorker> = setupWorker(...handlers);
